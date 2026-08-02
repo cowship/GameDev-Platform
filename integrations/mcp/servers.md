@@ -56,9 +56,15 @@
 
 # Notion
 
-아직 등록되지 않았습니다.
+| 항목 | 내용 |
+|---|---|
+| Transport | Remote |
+| 인증 방식 | Notion 계정 연동 (Claude Code 환경에서 자동 등록) |
+| 상태 확인 | `notion-get-users`(user_id: self) 또는 `notion-fetch`(id: self) 호출 |
 
-Notion MCP는 실제 Notion Workspace(`integrations/notion/workspace.md`)가 구축된 이후 연동할 예정입니다.
+**상태**: 등록 및 연결 확인 완료. `GameDev-Platform 진행 현황` 페이지를 생성하여 검증했습니다.
+
+`integrations/notion/workspace.md`에 계획된 Workspace 구조(🏠 Home, 🎮 Projects 등)와 `databases.md`에 설계된 Database는 아직 실제 Notion에 구축되지 않았습니다.
 
 ---
 

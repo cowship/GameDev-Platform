@@ -25,22 +25,7 @@
 
 # Standard Project Structure
 
-```text
-Assets/
-
-├── Scripts
-│   ├── Core
-│   ├── Gameplay
-│   ├── UI
-│   ├── Systems
-│   └── Utilities
-│
-├── Prefabs
-├── Scenes
-├── ScriptableObjects
-├── Materials
-└── Art
-```
+표준 `Assets/` 폴더 구조와 패키지 의존성은 [`project_template.md`](project_template.md)의 "Assets Structure" 섹션이 Source of Truth입니다. 본 문서는 프로젝트 생성 절차 개요만 다루므로, 구조 자체가 필요하면 해당 문서를 참고합니다.
 
 > 세부 코딩 규칙(네이밍, Architecture 선호/지양 패턴)은 [`agents/unity.md`](../../agents/unity.md)를 따릅니다.
 

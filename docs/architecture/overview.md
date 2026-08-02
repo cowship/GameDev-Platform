@@ -96,11 +96,11 @@ GameDev-Platform
 | Stage 1 | Development Environment | `integrations/*/setup.md`, `scripts/` |
 | Stage 2 | AI Environment | `agents/*.md`, `.claude/agents`, `.claude/commands`, MCP 4종 연동 (ADR 0001~0003) |
 | Stage 3 | Documentation Platform | `docs/architecture/`(본 문서), `docs/decisions/`, Notion 연동 |
-| Stage 4 | Unity Starter Template | `integrations/unity/`, `templates/` (예정) |
+| Stage 4 | Unity Starter Template | `integrations/unity/`(스펙 확정, ADR 0004). 실물 스켈레톤(`templates/unity-starter/`)은 Stage 6 First Game Project 착수 시 트리거되며, 지금 당장 생성하지 않음 |
 | Stage 5 | Team Collaboration | `integrations/github/workflow.md` — Stage 6 게임 프로젝트 Repository용 협업 표준 (작성 완료). Platform 자체는 ADR(`docs/decisions/`) + main 직접 커밋으로 운영 |
 | Stage 6 | First Game Project | 별도 Repository, 본 플랫폼의 표준을 소비 |
 
-현재(2026-08-02 기준) 완료된 영역은 Stage 1~3이며, 본 문서 세트는 Stage 3의 산출물입니다.
+현재(2026-08-02 기준) Stage 1~3은 완료되었고, Stage 4(Unity Starter Template)는 게이트([ADR 0004](../decisions/0004-unity-starter-template.md), [`integrations/unity/project_template.md`](../../integrations/unity/project_template.md)) 충족으로 진입했으며, Stage 5(Team Collaboration)는 요구사항 검토가 완료되었습니다(`integrations/github/workflow.md`는 Stage 6 게임 프로젝트 Repository용 표준으로 범위 확정). 본 문서 세트는 Stage 3의 산출물입니다.
 
 ---
 

@@ -6,4 +6,4 @@ tools: Read, Write, Edit, Grep, Glob, Bash, mcp__claude_ai_Notion__*, mcp__seque
 
 이 Agent는 [agents/documentation.md](../../agents/documentation.md)에 정의된 Documentation Specialist 역할을 따릅니다.
 
-작업 시작 전 반드시 위 파일을 Read로 읽고, Core Principles(Single Source of Truth 포함) / Documentation Standards / ADR Guidelines / Meeting Documentation / Quality Checklist를 그대로 적용합니다.
+작업 시작 전 반드시 위 파일을 Read로 읽고, Core Principles(Single Source of Truth 포함) / Documentation Standards / ADR Guidelines / Meeting Documentation / Notion Integration(Notion 작성 채널 및 Base Page 포함) / Quality Checklist를 그대로 적용합니다.

@@ -149,6 +149,26 @@ flowchart LR
 
 ---
 
+# Drift Check
+
+3계층 구조는 같은 Agent 정보(이름, 원본 링크, 호출 대상)가 세 파일에 나뉘어 있어, 한쪽만 수정하면 어긋날 위험이 있습니다(2026-08-02 수동 점검에서 실제로 `documentation` Adapter의 적용 섹션 목록 누락을 발견한 적 있음).
+
+`scripts/check_agent_drift.sh`로 이름/링크 일치 여부를 자동 점검할 수 있습니다.
+
+```bash
+./scripts/check_agent_drift.sh
+```
+
+각 Agent에 대해 다음을 확인합니다.
+
+- `agents/*.md` 원본 파일이 존재하는가
+- `.claude/agents/*.md`의 `name:` frontmatter가 Agent 이름과 일치하고, 원본을 링크하는가
+- `.claude/commands/*.md`가 올바른 `subagent_type`을 호출하는가
+
+이름/링크 불일치만 기계적으로 잡아내며, 섹션 내용 누락 같은 의미적 드리프트는 여전히 수동 점검이 필요합니다.
+
+---
+
 # Related Documents
 
 | Document | Description |

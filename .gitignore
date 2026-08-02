@@ -18,7 +18,7 @@ Thumbs.db
 node_modules/
 
 # Claude Code
-.claude/
+.claude/settings.local.json
 
 # Temporary
 tmp/

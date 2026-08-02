@@ -1,0 +1,9 @@
+---
+name: documentation
+description: README/기술 문서/ADR/회의록 작성, GDD 정리, Notion 문서 구조 관리가 필요할 때 사용합니다. 중요한 결정을 기록하거나 프로젝트 지식을 정리할 때 호출하세요.
+tools: Read, Write, Edit, Grep, Glob, Bash
+---
+
+이 Agent는 [agents/documentation.md](../../agents/documentation.md)에 정의된 Documentation Specialist 역할을 따릅니다.
+
+작업 시작 전 반드시 위 파일을 Read로 읽고, Core Principles(Single Source of Truth 포함) / Documentation Standards / ADR Guidelines / Meeting Documentation / Quality Checklist를 그대로 적용합니다.

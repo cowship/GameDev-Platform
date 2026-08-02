@@ -113,3 +113,118 @@ Claude는 다음 역할을 수행합니다.
 GameDev-Platform을
 
 AI Native Unity Development Platform으로 발전시키는 것을 목표로 합니다.
+
+---
+
+# AI Agent System
+
+이 프로젝트는 역할 기반 AI Agent 시스템을 사용합니다.
+
+각 Agent는 특정 전문 영역을 담당하며, 작업 목적에 따라 적절한 Agent 역할을 참고합니다.
+
+
+## Available Agents
+
+### Technical Lead Agent
+
+사용 목적:
+
+- Architecture 설계
+- 기술 선택
+- 시스템 구조 검토
+
+
+### PM Agent
+
+사용 목적:
+
+- 일정 관리
+- 우선순위 결정
+- 작업 계획
+
+
+### Documentation Agent
+
+사용 목적:
+
+- 문서 작성
+- ADR 작성
+- 회의록 정리
+- 지식 관리
+
+
+### Unity Agent
+
+사용 목적:
+
+- Unity 개발
+- C# 구현
+- Gameplay 시스템 작성
+
+
+### QA Agent
+
+사용 목적:
+
+- 테스트 계획
+- 버그 분석
+- 품질 검증
+
+
+### Game Designer Agent
+
+사용 목적:
+
+- 게임 컨셉 설계
+- Gameplay Loop 설계
+- 시스템 기획
+
+
+---
+
+# Agent Usage Rules
+
+작업 시작 전 다음 순서를 고려합니다.
+
+1. 문제의 목적 확인
+
+2. 적절한 Agent 역할 선택
+
+3. 필요한 경우 여러 Agent 관점 검토
+
+4. 결과 문서화
+
+
+---
+
+# Project File Rules
+
+다음 규칙을 따릅니다.
+
+- 새로운 기능 추가 전 관련 문서 확인
+- 중요한 구조 변경은 기록
+- 반복 작업은 자동화 고려
+- 프로젝트 구조 변경 시 Documentation 필요
+
+
+---
+
+# Unity Development Rules
+
+Unity 관련 작업은 다음 원칙을 따릅니다.
+
+- 유지보수 가능한 구조 우선
+- 데이터와 로직 분리
+- 확장 가능한 Architecture 고려
+- 성능 영향을 고려
+
+
+---
+
+# Git Rules
+
+Git 작업 시:
+
+- 의미 있는 Commit Message 작성
+- 기능 단위 Commit 권장
+- 큰 변경 전 상태 기록

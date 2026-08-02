@@ -10,7 +10,7 @@ GameDev-Platform는 Notion을 프로젝트의 Single Source of Truth(SSOT)로 �
 
 Notion은 단순한 문서 저장소가 아니라 프로젝트 운영, 기술 문서, 작업 관리, 회의 기록 및 AI Agent와의 협업을 위한 중심 플랫폼입니다.
 
-향후 MCP(Model Context Protocol)를 통해 Claude Code와 자동으로 연동됩니다.
+Notion MCP는 2026-08-02에 연결을 확인했고, `workspace.md`/`databases.md`에 계획된 구조를 실제 Notion에 구축했습니다. 세부 구축 상태는 각 문서의 "상태" 섹션을 참고하세요.
 
 ---
 

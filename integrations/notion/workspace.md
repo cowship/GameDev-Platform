@@ -2,6 +2,16 @@
 
 ---
 
+# 상태
+
+실제 Notion Workspace에 아래 구조로 구축 완료했습니다 (2026-08-02, Notion MCP 통해 생성).
+
+- Database로 구현: Projects, Tasks, Meeting Notes, Bug Reports, Features (`databases.md` 참고)
+- ADR Database는 계획을 보완해 🏛 Architecture 하위로 이동 배치 (본 문서의 Architecture 섹션은 원래 페이지였으나, 실제로는 ADR Database를 담는 컨테이너 페이지로 구축됨)
+- 나머지(Game Design Documents, Knowledge Base, Releases, Archive)는 일반 페이지로 생성, 아직 콘텐츠는 비어있음
+
+---
+
 # Purpose
 
 모든 프로젝트는 동일한 Workspace 구조를 사용합니다.

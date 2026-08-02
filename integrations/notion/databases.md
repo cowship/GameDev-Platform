@@ -2,6 +2,17 @@
 
 ---
 
+# 상태
+
+Projects, Tasks, Meeting Notes, ADR, Features, Bug Reports 6개 Database를 실제 Notion Workspace에 구축 완료했습니다 (2026-08-02, Notion MCP 통해 생성). ADR Database는 🏛 Architecture 페이지 하위에 배치했습니다.
+
+아래 설계와의 차이:
+
+- Meeting Notes의 `Action Items`, Features의 `Related Task`는 Tasks Database와 양방향(Two-way) Relation으로 연결했습니다.
+- Meeting Notes의 `Participants`는 설계대로 Multi-select로 생성했으나 초기 옵션은 비어있어 사용하며 채워야 합니다.
+
+---
+
 # Purpose
 
 프로젝트의 핵심 정보를 Database 형태로 관리합니다.

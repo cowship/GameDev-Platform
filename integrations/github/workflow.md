@@ -2,6 +2,13 @@
 
 ---
 
+> **적용 범위**: 이 문서는 GameDev-Platform 저장소 자체의 운영 규칙이 아니라,
+> Stage 6에서 생성되는 게임 프로젝트 Repository가 따를 협업 표준입니다.
+> GameDev-Platform 자체의 구조적 의사결정은 `docs/decisions/`(ADR)를 Single Source of Truth로
+> 사용하며, `main`에 직접 커밋·push하는 방식으로 운영됩니다.
+
+---
+
 # Development Philosophy
 
 GitHub는 코드 변경 이력과 협업 과정을 투명하게 기록하는 기반입니다.

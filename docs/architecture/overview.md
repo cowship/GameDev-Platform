@@ -97,7 +97,7 @@ GameDev-Platform
 | Stage 2 | AI Environment | `agents/*.md`, `.claude/agents`, `.claude/commands`, MCP 4종 연동 (ADR 0001~0003) |
 | Stage 3 | Documentation Platform | `docs/architecture/`(본 문서), `docs/decisions/`, Notion 연동 |
 | Stage 4 | Unity Starter Template | `integrations/unity/`, `templates/` (예정) |
-| Stage 5 | Team Collaboration | `integrations/github/workflow.md` (예정 확장) |
+| Stage 5 | Team Collaboration | `integrations/github/workflow.md` — Stage 6 게임 프로젝트 Repository용 협업 표준 (작성 완료). Platform 자체는 ADR(`docs/decisions/`) + main 직접 커밋으로 운영 |
 | Stage 6 | First Game Project | 별도 Repository, 본 플랫폼의 표준을 소비 |
 
 현재(2026-08-02 기준) 완료된 영역은 Stage 1~3이며, 본 문서 세트는 Stage 3의 산출물입니다.

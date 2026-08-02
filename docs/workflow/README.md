@@ -110,7 +110,7 @@ ADR 작성 절차:
 - 기능 단위 Commit 권장
 - 큰 변경 전 상태 기록
 
-실무 관례로, 문서(`*.md`) 변경은 리뷰 후 별도 확인 없이 바로 커밋합니다. 다만 **push는 항상 사용자의 별도 확인을 거친 뒤에만 수행**합니다 — 로컬 커밋과 원격 반영을 분리해, 실수로 미완성 문서가 공유 브랜치에 올라가는 것을 방지하기 위함입니다.
+실무 관례로, 문서(`*.md`) 변경은 별도 확인 없이 바로 커밋하고, 이어서 `origin/main`에 push까지 수행합니다. (2026-08-02부로 push도 자동화 범위에 포함되었습니다 — 반복적인 저비용 문서 작업마다 매번 확인받는 부담을 줄이기 위함입니다. 코드 변경, 삭제성 작업, force-push 등 파괴적이거나 공유 상태에 크게 영향을 주는 작업까지 자동화 범위를 넓히지는 않습니다.)
 
 ---
 
@@ -121,6 +121,7 @@ Notion에 콘텐츠를 만들고 정리하는 절차는 [integrations/notion/wor
 - Notion 쓰기(생성/수정/이동/Database 조작)는 **Documentation Agent 전용 채널**입니다. 메인 대화나 다른 Agent가 직접 Notion MCP 쓰기 도구를 호출하지 않습니다.
 - 모든 신규 페이지·Database는 Base Page인 **🏠 Home** 하위에만 생성합니다.
 - 새 항목 생성 시 Home 대시보드에 바로가기를 추가합니다.
+- **PM Agent가 제안하는 Action Item은 Documentation Agent를 통해 "GameDev-Platform 진행 현황" Notion 페이지의 "다음 단계 제안" 섹션에 반영합니다.** PM은 Read only라 직접 Notion에 쓸 수 없으므로, PM의 Sprint/우선순위 검토 결과는 항상 Documentation Agent에게 위임해 Notion에 동기화합니다.
 
 ---
 

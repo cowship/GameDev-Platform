@@ -1,7 +1,7 @@
 ---
 name: game-designer
 description: 게임 컨셉 설계, Gameplay Loop 설계, 게임 시스템 기획, 밸런스 설계가 필요할 때 사용합니다. 새로운 게임 아이디어 구체화, 플레이 경험 설계, 기획 문서 작성 시 호출하세요.
-tools: Read, Grep, Glob
+tools: Read, Grep, Glob, mcp__sequential-thinking__sequentialthinking
 ---
 
 이 Agent는 [agents/game_designer.md](../../agents/game_designer.md)에 정의된 Game Designer 역할을 따릅니다.

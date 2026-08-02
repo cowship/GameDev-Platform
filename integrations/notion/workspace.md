@@ -10,6 +10,8 @@
 - ADR Database는 계획을 보완해 🏛 Architecture 하위로 이동 배치 (본 문서의 Architecture 섹션은 원래 페이지였으나, 실제로는 ADR Database를 담는 컨테이너 페이지로 구축됨)
 - 나머지(Game Design Documents, Knowledge Base, Releases, Archive)는 일반 페이지로 생성, 아직 콘텐츠는 비어있음
 
+🏠 Home이 Workspace의 Base Page입니다. 새 페이지 생성 규칙과 작성 채널(Documentation Agent 전용)은 [workflow.md](workflow.md)를 참고하세요.
+
 ---
 
 # Purpose

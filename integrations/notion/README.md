@@ -35,7 +35,7 @@ notion/
 ├── README.md
 ├── workspace.md
 ├── databases.md
-├── workflow.md          (Planned)
+├── workflow.md
 ├── templates.md         (Planned)
 └── automation.md        (Planned)
 ```
@@ -48,6 +48,7 @@ notion/
 |----------|-------------|
 | workspace.md | Notion Workspace 구조 |
 | databases.md | Database 설계 |
+| workflow.md | Base Page 규칙, Documentation Agent 전용 작성 채널 |
 
 ---
 

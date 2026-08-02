@@ -155,6 +155,12 @@ Notion MCP 사용 시 다음 원칙을 따릅니다.
 - 제목 규칙 유지
 - 변경 이력 관리 고려
 
+## Notion 작성 채널 및 Base Page
+
+- Notion에 새 페이지/Database를 만들거나 기존 콘텐츠를 수정하는 작업은 **Documentation Agent**를 통해서만 수행합니다. 메인 대화에서 Notion MCP 도구를 직접 호출하지 않습니다.
+- Workspace의 **Base Page는 🏠 Home**입니다 (`integrations/notion/workspace.md` 참고). 신규 페이지·Database는 항상 Home 페이지 하위(직계 자식이거나, 이미 Home 하위에 있는 페이지의 자식)에 생성합니다. Workspace 최상위에 독립 페이지를 만들지 않습니다.
+- 새 항목을 만들면 Home 페이지의 대시보드(카테고리별 Callout/Column)에도 바로가기를 추가해 탐색성을 유지합니다.
+
 ---
 
 # Quality Checklist

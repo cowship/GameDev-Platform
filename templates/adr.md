@@ -1,4 +1,6 @@
-> 원본 관례: `docs/decisions/0001-agent-adapter-strategy.md` ~ `0003-agent-mcp-access.md`의 실제 구조 (agents/documentation.md의 "ADR Guidelines"와 대조해 실제 관례에 맞춤)
+> 원본 관례: `docs/decisions/0001-agent-adapter-strategy.md` ~ `0004-unity-starter-template.md`의 실제 구조 (agents/documentation.md의 "ADR Guidelines"와 대조해 실제 관례에 맞춤)
+>
+> ADR 0004 작성 시 실사용 검증한 결과: `## Context`와 `## Status` 사이에는 구분선을 넣지 않지만, `## Decision` / `## Alternatives` / `## Consequences` 앞에는 항상 `---` 구분선을 넣는 것이 0001~0003 전체에서 일관된 관례였다. 이 템플릿은 그 관례를 반영한다.
 
 # ADR {번호}: {제목}
 
@@ -14,6 +16,8 @@ Proposed / Accepted / Deprecated
 
 [이 결정이 왜 필요한지 문제 상황을 설명합니다. 관련된 이전 ADR이 있다면 링크합니다.]
 
+---
+
 ## Decision
 
 [선택한 결정을 설명합니다. 하위 결정이 여러 개라면 번호를 매겨 나열합니다.]
@@ -24,10 +28,14 @@ Proposed / Accepted / Deprecated
 2. **[결정 항목 2]**
    [설명]
 
+---
+
 ## Alternatives
 
 - **(A) [대안 이름]**: [설명]. [기각 또는 보류 이유].
 - **(B) [대안 이름]**: [설명]. [기각 또는 보류 이유].
+
+---
 
 ## Consequences
 

@@ -79,7 +79,7 @@
 | 등록 명령 | `claude mcp add context7 -- npx -y @upstash/context7-mcp` |
 | 상태 확인 | `claude mcp list` |
 
-**상태**: 등록 및 연결 확인 완료 (`claude mcp list`에서 Connected).
+**상태**: 등록 및 연결 확인 완료 (`claude mcp list`에서 Connected). 부작용 없는 읽기 전용 서버라 6개 Adapter Agent 전체에 접근을 허용했습니다 ([ADR 0005](../../docs/decisions/0005-context7-mcp-access.md)).
 
 ---
 

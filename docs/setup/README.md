@@ -18,7 +18,7 @@
 ./scripts/setup.sh
 ```
 
-`setup.sh`는 `check_environment.sh`로 현재 환경을 점검한 뒤, 아래 문서 순서를 안내합니다.
+`setup.sh`는 `check_environment.sh`로 현재 환경을 점검하고, `setup_mcp.sh`로 MCP Server 등록까지 자동으로 진행한 뒤, 아래 문서 순서를 안내합니다. 비개발자도 이 한 줄만 실행하면 GitHub Personal Access Token 입력 안내를 포함해 대부분의 MCP 등록이 끝납니다 (Notion·Unity MCP는 계정 연동/Unity Editor가 필요해 수동 단계로 안내됩니다).
 
 ---
 
@@ -50,3 +50,4 @@ Git, Node.js, Claude Code, VS Code, GitHub SSH Key 설치 여부를 확인합니
 |---|---|
 | [scripts/setup.sh](../../scripts/setup.sh) | 전체 설정 진입점 |
 | [scripts/check_environment.sh](../../scripts/check_environment.sh) | 환경 점검 스크립트 |
+| [scripts/setup_mcp.sh](../../scripts/setup_mcp.sh) | MCP Server 자동 등록 스크립트 (반복 실행 안전) |

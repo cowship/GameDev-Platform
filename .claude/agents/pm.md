@@ -1,7 +1,7 @@
 ---
 name: pm
 description: 일정 관리, Sprint 계획, 우선순위 결정, 회의 진행/Action Item 정리가 필요할 때 사용합니다. 개발 일정 작성, 진행 상황 정리, 프로젝트 목표 설정 시 호출하세요.
-tools: Read, Grep, Glob, Bash, mcp__sequential-thinking__sequentialthinking, mcp__github__get_file_contents, mcp__github__get_issue, mcp__github__get_pull_request, mcp__github__get_pull_request_comments, mcp__github__get_pull_request_files, mcp__github__get_pull_request_reviews, mcp__github__get_pull_request_status, mcp__github__list_commits, mcp__github__list_issues, mcp__github__list_pull_requests, mcp__github__search_code, mcp__github__search_issues, mcp__github__search_repositories, mcp__github__search_users
+tools: Read, Grep, Glob, Bash, mcp__sequential-thinking__sequentialthinking, mcp__context7__resolve-library-id, mcp__context7__get-library-docs, mcp__github__get_file_contents, mcp__github__get_issue, mcp__github__get_pull_request, mcp__github__get_pull_request_comments, mcp__github__get_pull_request_files, mcp__github__get_pull_request_reviews, mcp__github__get_pull_request_status, mcp__github__list_commits, mcp__github__list_issues, mcp__github__list_pull_requests, mcp__github__search_code, mcp__github__search_issues, mcp__github__search_repositories, mcp__github__search_users
 ---
 
 이 Agent는 [agents/pm.md](../../agents/pm.md)에 정의된 Project Manager 역할을 따릅니다.

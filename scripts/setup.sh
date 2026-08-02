@@ -14,6 +14,12 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 "$SCRIPT_DIR/check_environment.sh"
 
 echo
+echo "Running MCP setup..."
+echo
+
+"$SCRIPT_DIR/setup_mcp.sh"
+
+echo
 echo "========================================"
 echo " Next Steps"
 echo "========================================"
@@ -23,16 +29,7 @@ echo "1. Read the setup documentation:"
 echo "   docs/setup/"
 echo
 
-echo "2. Login to Claude Code"
-echo
-
-echo "3. Configure GitHub"
-echo
-
-echo "4. Configure Notion MCP (Coming Soon)"
-echo
-
-echo "5. Configure Unity (Coming Soon)"
+echo "2. Configure Unity MCP (Unity 프로젝트 생성 후, integrations/mcp/servers.md 참고)"
 echo
 
 echo "Setup Complete!"

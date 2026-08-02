@@ -18,7 +18,7 @@ MCP(Model Context Protocol)는 Claude Code가 외부 시스템(GitHub, Notion �
 | Filesystem | Repository 루트에 대한 읽기 + 쓰기(write_file, edit_file, move_file 등) | Connected |
 | Sequential Thinking | 도구 1개(`sequentialthinking`), 부작용 없는 순수 추론 보조 | Connected |
 | Notion | 읽기/쓰기 혼재 | Connected |
-| Context7 | 도구 2개(라이브러리 문서 검색/조회), 부작용 없는 읽기 전용 | Connected — 아직 어느 Adapter Agent에도 할당되지 않음 (별도 결정 필요) |
+| Context7 | 도구 2개(라이브러리 문서 검색/조회), 부작용 없는 읽기 전용 | Connected — 6개 Agent 전체 허용 |
 | Unity MCP | Unity Editor 상태 조회 + Editor 조작(Scene/Script 등) | Planned — Unity 프로젝트 생성 후 등록 예정 |
 
 세부 등록 명령/인증 방식은 [integrations/mcp/servers.md](../../integrations/mcp/servers.md)를 참고합니다.
@@ -43,6 +43,7 @@ flowchart TB
         FS[[Filesystem MCP]]
         ST[[Sequential Thinking MCP]]
         NO[[Notion MCP]]
+        CTX[[Context7 MCP]]
     end
 
     TL -->|읽기 전용| GH
@@ -58,16 +59,23 @@ flowchart TB
     UNITY --> ST
     QA --> ST
     GD --> ST
+
+    TL --> CTX
+    PM --> CTX
+    DOC --> CTX
+    UNITY --> CTX
+    QA --> CTX
+    GD --> CTX
 ```
 
-| Agent | GitHub MCP | Filesystem MCP | Sequential Thinking MCP | Notion MCP |
-|---|---|---|---|---|
-| technical-lead | 읽기 전용 | ✗ | ✓ | ✗ |
-| pm | 읽기 전용 | ✗ | ✓ | ✗ |
-| qa | 읽기 전용 | ✗ | ✓ | ✗ |
-| game-designer | ✗ | ✗ | ✓ | ✗ |
-| unity | 읽기 전용 + 쓰기 일부 | ✗ | ✓ | ✗ |
-| documentation | 읽기 전용 + `add_issue_comment` | ✗ | ✓ | 전체(`mcp__claude_ai_Notion__*`) |
+| Agent | GitHub MCP | Filesystem MCP | Sequential Thinking MCP | Notion MCP | Context7 MCP |
+|---|---|---|---|---|---|
+| technical-lead | 읽기 전용 | ✗ | ✓ | ✗ | ✓ |
+| pm | 읽기 전용 | ✗ | ✓ | ✗ | ✓ |
+| qa | 읽기 전용 | ✗ | ✓ | ✗ | ✓ |
+| game-designer | ✗ | ✗ | ✓ | ✗ | ✓ |
+| unity | 읽기 전용 + 쓰기 일부 | ✗ | ✓ | ✗ | ✓ |
+| documentation | 읽기 전용 + `add_issue_comment` | ✗ | ✓ | 전체(`mcp__claude_ai_Notion__*`) | ✓ |
 
 **읽기 전용 도구 목록** (공통): `get_file_contents`, `get_issue`, `get_pull_request`, `get_pull_request_comments`, `get_pull_request_files`, `get_pull_request_reviews`, `get_pull_request_status`, `list_commits`, `list_issues`, `list_pull_requests`, `search_code`, `search_issues`, `search_repositories`, `search_users`
 
@@ -92,6 +100,9 @@ flowchart TB
 4. **Notion → Documentation Agent 전용 유지**
    기존 결정(Notion 작성 채널을 Documentation Agent로 일원화)을 그대로 따릅니다.
 
+5. **Context7 → 6개 Agent 전체 허용**
+   Sequential Thinking과 동일한 논리(부작용 없는 읽기 전용)로 전체 개방했습니다. 자세한 내용은 [ADR 0005](../decisions/0005-context7-mcp-access.md)를 참고합니다.
+
 ---
 
 # Consequences
@@ -112,6 +123,7 @@ flowchart TB
 | Document | Description |
 |---|---|
 | [ADR 0003](../decisions/0003-agent-mcp-access.md) | Agent별 MCP 접근 범위 상세 |
+| [ADR 0005](../decisions/0005-context7-mcp-access.md) | Context7 MCP 전체 Agent 개방 결정 |
 | [integrations/mcp/README.md](../../integrations/mcp/README.md) | MCP 프로토콜 개요 |
 | [integrations/mcp/servers.md](../../integrations/mcp/servers.md) | 서버 등록 상세(Transport, 인증, 상태) |
 | [agent-system.md](agent-system.md) | Agent 3단 구조 (네이티브 Tool 권한) |

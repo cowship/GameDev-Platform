@@ -2,6 +2,18 @@
 
 ---
 
+# Quick Start (자동화 스크립트)
+
+비밀정보 없이 등록 가능한 서버(Filesystem, Sequential Thinking, Context7)와 GitHub(Token 입력 안내 포함)는 아래 스크립트로 한 번에 등록할 수 있습니다. 이미 등록된 서버는 자동으로 건너뛰므로 여러 번 실행해도 안전합니다.
+
+```bash
+./scripts/setup_mcp.sh
+```
+
+Notion(계정 연동)과 Unity MCP(Unity 프로젝트 필요)는 성격상 자동화할 수 없어 스크립트가 안내 문구만 출력합니다. 아래는 각 서버를 수동으로 등록할 때 참고하는 절차입니다.
+
+---
+
 # Requirements
 
 MCP 사용 전 다음 환경이 준비되어 있어야 합니다.

@@ -34,7 +34,7 @@ unity/
 ├── README.md
 ├── setup.md
 ├── workflow.md
-└── project_template.md   (Planned)
+└── project_template.md
 ```
 
 ---
@@ -45,6 +45,7 @@ unity/
 |----------|-------------|
 | setup.md | Unity Hub, Editor, Git LFS 설치 및 설정 |
 | workflow.md | 프로젝트 생성 절차, 표준 구조, 버전 관리 규칙 |
+| [project_template.md](project_template.md) | Unity Starter Template — Repository 전체 구조, 필수 패키지, gitignore/LFS 기준선 |
 
 ---
 
@@ -53,6 +54,7 @@ unity/
 | Document | Description |
 |----------|-------------|
 | [agents/unity.md](../../agents/unity.md) | Unity Agent 코딩 원칙 및 Architecture 가이드 |
+| [docs/decisions/0004-unity-starter-template.md](../../docs/decisions/0004-unity-starter-template.md) | Unity Starter Template 구조 결정 근거(ADR) |
 
 ---
 
@@ -60,9 +62,10 @@ unity/
 
 향후 다음 항목을 추가할 예정입니다.
 
-- Unity 프로젝트 템플릿(Starter Kit) 정의 (`project_template.md`)
+- ~~Unity 프로젝트 템플릿(Starter Kit) 정의 (`project_template.md`)~~ 완료 ([ADR 0004](../../docs/decisions/0004-unity-starter-template.md), Stage 4 게이트 충족)
 - Unity MCP 연동 검토
 - CI 기반 Unity Build 자동화
+- `templates/unity-starter/`에 실제 복사 가능한 폴더 스켈레톤 + `manifest.json` 프리셋 추가 (Stage 6 첫 게임 적용 후 반복 수작업이 확인되면 검토)
 
 ---
 

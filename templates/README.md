@@ -17,6 +17,7 @@ templates/
 
 ├── README.md          (본 문서, 인덱스)
 ├── adr.md              (ADR 작성 템플릿)
+├── dev-log.md           (1인 개발일지 템플릿)
 ├── meeting-notes.md    (회의록 작성 템플릿)
 └── sprint-report.md    (Sprint/PM 보고 템플릿)
 ```
@@ -28,6 +29,7 @@ templates/
 | Template | 원본 관례 |
 |---|---|
 | [adr.md](adr.md) | `docs/decisions/0001~0003-*.md`의 실제 ADR 구조 (agents/documentation.md의 "ADR Guidelines" 섹션과 대조해 실제 관례에 맞춤) |
+| [dev-log.md](dev-log.md) | 기존 관례 없이 신설. PM Agent가 확정한 Stage 6(First Game Project) 트리거에 맞춰, 여러 명이 참석하는 `meeting-notes.md`와 구분되는 혼자 쓰는 개발일지 형식 |
 | [meeting-notes.md](meeting-notes.md) | `agents/documentation.md`의 "Meeting Documentation" 섹션 + `agents/pm.md`의 "Meeting Management" 절차 + `integrations/notion/databases.md`의 Meeting Notes Database 속성 |
 | [sprint-report.md](sprint-report.md) | `agents/pm.md`의 "Output Format" 섹션 |
 

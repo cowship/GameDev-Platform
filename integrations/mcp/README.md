@@ -63,9 +63,9 @@ mcp/
 향후 다음 항목을 추가할 예정입니다.
 
 - Notion MCP 연동 (Notion Workspace 구축 이후)
-- Unity MCP 연동 (검토 중)
+- Unity MCP 연동 (실제 Unity 프로젝트 생성 이후)
 
-> GitHub MCP는 연동 완료되었습니다. 자세한 내용은 [servers.md](servers.md)를 참고합니다.
+> GitHub, Filesystem, Sequential Thinking MCP는 연동 완료되었습니다. 자세한 내용은 [servers.md](servers.md)를 참고합니다.
 
 ---
 

@@ -24,6 +24,36 @@
 
 ---
 
+# Filesystem
+
+| 항목 | 내용 |
+|---|---|
+| Transport | Local (stdio) |
+| 서버 | `npx -y @modelcontextprotocol/server-filesystem /home/minsooim1/workspace/GameDev-Platform` |
+| 인증 방식 | 없음 (로컬 파일시스템 직접 접근) |
+| 접근 범위 | 저장소 루트(`/home/minsooim1/workspace/GameDev-Platform`)로 제한 |
+| 등록 명령 | `claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem /home/minsooim1/workspace/GameDev-Platform` |
+| 상태 확인 | `claude mcp list` |
+
+**상태**: 등록 및 연결 확인 완료 (`claude mcp list`에서 Connected).
+
+---
+
+# Sequential Thinking
+
+| 항목 | 내용 |
+|---|---|
+| Transport | Local (stdio) |
+| 서버 | `npx -y @modelcontextprotocol/server-sequential-thinking` |
+| 인증 방식 | 없음 |
+| 용도 | 범용 사고 보조 (Architecture 설계, ADR 작성 등 복잡한 판단 보조) |
+| 등록 명령 | `claude mcp add sequential-thinking -- npx -y @modelcontextprotocol/server-sequential-thinking` |
+| 상태 확인 | `claude mcp list` |
+
+**상태**: 등록 및 연결 확인 완료 (`claude mcp list`에서 Connected).
+
+---
+
 # Notion
 
 아직 등록되지 않았습니다.

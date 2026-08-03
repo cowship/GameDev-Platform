@@ -18,7 +18,9 @@ Claude Code 사용 전 다음 환경이 준비되어 있어야 합니다.
 
 # Installation
 
-Claude Code 설치
+`./scripts/check_environment.sh`를 실행하면 Claude Code CLI가 없을 때 아래 명령을 자동으로 실행할지 물어봅니다 (y 입력 시 바로 설치).
+
+수동으로 설치하려면 다음을 실행합니다.
 
 ```bash
 curl -fsSL https://claude.ai/install.sh | bash

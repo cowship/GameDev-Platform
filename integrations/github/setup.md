@@ -15,7 +15,9 @@ GitHub 사용 전 다음 환경이 준비되어 있어야 합니다.
 
 # SSH Key 생성
 
-기존 키가 없는 경우 생성합니다.
+`./scripts/check_environment.sh`를 실행하면 SSH Key가 없을 때 생성 여부를 물어보고, y 입력 시 자동으로 생성한 뒤 Public Key를 화면에 출력합니다 (GitHub 웹사이트 등록은 자동화할 수 없어 수동으로 진행해야 합니다).
+
+수동으로 생성하려면 기존 키가 없는 경우 다음을 실행합니다.
 
 ```bash
 ssh-keygen -t ed25519 -C "your_email@example.com"

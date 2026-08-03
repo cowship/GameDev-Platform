@@ -20,6 +20,12 @@ echo
 "$SCRIPT_DIR/setup_mcp.sh"
 
 echo
+echo "Running Claude Skills setup..."
+echo
+
+"$SCRIPT_DIR/setup_claude_skills.sh"
+
+echo
 echo "========================================"
 echo " Next Steps"
 echo "========================================"

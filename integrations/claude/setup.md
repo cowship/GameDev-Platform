@@ -85,6 +85,24 @@ Claude는 프로젝트를 분석하며 다음 파일을 우선적으로 참고�
 
 ---
 
+# Recommended Skills
+
+GameDev-Platform이 채택한 외부(커뮤니티) Claude Code Skill입니다.
+
+| Skill | 용도 | 채택 이유 |
+|---|---|---|
+| [unity-coding-skills](https://github.com/nowsprinting/unity-coding-skills) (nowsprinting) | Unity Test-first workflow, 코딩 가이드라인, Scene 편집 | `agents/unity.md`의 원칙(유지보수성, 낮은 결합도)과 방향이 일치 |
+
+설치는 아래 스크립트로 자동화되어 있습니다 (여러 번 실행해도 안전).
+
+```bash
+./scripts/setup_claude_skills.sh
+```
+
+설치 후에는 Claude Code 세션을 재시작해야 새 Skill이 로드됩니다.
+
+---
+
 # Troubleshooting
 
 ## PATH 오류

@@ -92,6 +92,8 @@
 | 실행 위치 | Unity Editor가 설치된 Windows 환경 (본 Repository의 Claude Code는 WSL에서 실행 중이라 환경이 분리되어 있음) |
 | 상태 | **대기** — 아직 Unity 프로젝트가 생성되지 않아 실제 등록 불가 |
 
+> **자동화**: 아래 1~4단계 중 WSL 쪽 준비(Git LFS, Windows Git Credential Manager 연동, Unity MCP 등록)는 `scripts/setup_unity_workspace.sh`로 자동화되어 있습니다. Unity 프로젝트 생성 후 Editor를 한 번 실행한 뒤 이 스크립트를 실행하면 됩니다 (여러 번 실행해도 안전).
+
 **연결 전 필요한 것**:
 
 1. Unity 프로젝트 생성 (Unity 6000.0 이상, `com.unity.ai.assistant` 패키지 포함 여부 확인 — 없으면 Package Manager에서 추가)

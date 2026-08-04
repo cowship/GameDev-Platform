@@ -1,0 +1,73 @@
+name: check_environment.sh Dry Run
+
+# scripts/check_environment.sh가 "처음 clone한 팀원"(Git/Node.js/Claude Code CLI/
+# GitHub CLI/SSH Key가 전부 없는 상태) 시나리오에서도 실제로 설치까지 성공하는지
+# 깨끗한 Docker 컨테이너에서 검증한다.
+#
+# WSL2 전용 분기(VS Code winget 연동, WSL 감지)는 컨테이너 환경 특성상 재현할 수
+# 없어 검증 대상에서 제외한다 (docs/setup/README.md의 수동 온보딩 체크리스트 참고).
+
+on:
+  pull_request:
+    paths:
+      - "scripts/check_environment.sh"
+      - "scripts/setup.sh"
+  push:
+    branches: [main]
+    paths:
+      - "scripts/check_environment.sh"
+      - "scripts/setup.sh"
+  workflow_dispatch:
+
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Bootstrap minimal tools
+        # 실제 WSL2 Ubuntu에는 기본 포함되지만, 컨테이너 base 이미지엔 없어서
+        # check_environment.sh의 sudo 분기를 테스트하려면 먼저 깔아야 한다.
+        run: |
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y sudo curl ca-certificates
+
+      - name: Run check_environment.sh and verify installs
+        run: |
+          printf 'y\ny\nCI Bot\nci-bot@example.com\ny\ny\ny\ny\nci-bot@example.com\n' \
+            | bash scripts/check_environment.sh || true
+
+          # nvm/claude 설치는 스크립트 프로세스 안에서만 PATH가 갱신되므로,
+          # 검증을 위해 이 스텝에서 다시 로드한다.
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+          export PATH="$HOME/.local/bin:$PATH"
+
+          set -e
+          echo "-- Git --"
+          command -v git
+          git --version
+          [ "$(git config --global --get user.name)" = "CI Bot" ]
+          [ "$(git config --global --get user.email)" = "ci-bot@example.com" ]
+
+          echo "-- Node.js / npm --"
+          command -v node
+          node --version
+          command -v npm
+          npm --version
+
+          echo "-- Claude Code CLI --"
+          command -v claude
+          claude --version
+
+          echo "-- GitHub CLI --"
+          command -v gh
+          gh --version
+
+          echo "-- SSH Key --"
+          test -f "$HOME/.ssh/id_ed25519.pub"
+
+          echo "모든 자동 설치 분기(Git/Node.js/npm/Claude CLI/gh/SSH Key)가 정상 동작했습니다."

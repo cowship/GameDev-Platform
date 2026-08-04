@@ -70,6 +70,9 @@ echo
 echo "3) Node.js / npm"
 echo "----------------------------------------"
 export NVM_DIR="$HOME/.nvm"
+# nvm.sh 내부 코드가 set -u(nounset)와 호환되지 않아(예: unbound variable로 스크립트 전체가
+# 조기 종료됨) nvm을 다루는 동안만 nounset을 잠시 끈다.
+set +u
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" >/dev/null 2>&1
 
 if command -v node >/dev/null 2>&1 && command -v npm >/dev/null 2>&1; then
@@ -98,6 +101,7 @@ else
         NEEDS_MANUAL=1
     fi
 fi
+set -u
 echo
 
 # ---------- 4) Claude Code CLI ----------
@@ -174,13 +178,17 @@ else
     echo "❌ SSH Key        Not Found"
     if confirm "지금 SSH Key(ed25519)를 생성할까요?"; then
         read -r -p "  GitHub 계정 이메일: " ssh_email
-        ssh-keygen -t ed25519 -C "$ssh_email" -f "$HOME/.ssh/id_ed25519" -N ""
-        echo "✅ SSH Key를 생성했습니다."
-        echo
-        echo "   ⚠️  아래 Public Key를 GitHub → Settings → SSH and GPG keys 에 직접 등록해야 합니다 (자동화 불가):"
-        echo "   ---"
-        cat ~/.ssh/id_ed25519.pub
-        echo "   ---"
+        mkdir -p "$HOME/.ssh" && chmod 700 "$HOME/.ssh"
+        if ssh-keygen -t ed25519 -C "$ssh_email" -f "$HOME/.ssh/id_ed25519" -N ""; then
+            echo "✅ SSH Key를 생성했습니다."
+            echo
+            echo "   ⚠️  아래 Public Key를 GitHub → Settings → SSH and GPG keys 에 직접 등록해야 합니다 (자동화 불가):"
+            echo "   ---"
+            cat ~/.ssh/id_ed25519.pub
+            echo "   ---"
+        else
+            echo "❌ SSH Key 생성에 실패했습니다. 수동 생성: integrations/github/setup.md 참고"
+        fi
         NEEDS_MANUAL=1
     else
         echo "   수동 생성: integrations/github/setup.md 참고"

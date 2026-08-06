@@ -61,7 +61,7 @@ if is_registered github; then
 else
     TOKEN="${GITHUB_PERSONAL_ACCESS_TOKEN:-}"
     if [ -z "$TOKEN" ]; then
-        echo "GitHub Personal Access Token이 아직 없다면 발급 방법은 integrations/github/setup.md 를 참고하세요."
+        echo "GitHub Personal Access Token(Fine-grained 권장)이 아직 없다면 발급 방법은 integrations/github/setup.md 를 참고하세요."
         read -r -s -p "GitHub Personal Access Token 입력 (입력값은 화면에 표시되지 않습니다): " TOKEN
         echo
     fi
@@ -72,7 +72,7 @@ else
         printf "✅ %-20s 등록 완료\n" "github"
         MCP_LIST="$(claude mcp list 2>/dev/null)"
     else
-        printf "❌ %-20s 등록 실패 — 토큰 권한(repo)을 확인하세요.\n" "github"
+        printf "❌ %-20s 등록 실패 — 토큰 권한(Contents/Issues/Pull requests/Workflows)을 확인하세요.\n" "github"
     fi
     unset TOKEN
 fi

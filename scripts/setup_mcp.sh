@@ -68,11 +68,19 @@ else
 
     if [ -z "$TOKEN" ]; then
         echo "❌ 토큰이 입력되지 않아 GitHub MCP 등록을 건너뜁니다. 준비되면 이 스크립트를 다시 실행하세요."
-    elif claude mcp add github -e GITHUB_PERSONAL_ACCESS_TOKEN="$TOKEN" -- npx -y @modelcontextprotocol/server-github >/dev/null 2>&1; then
-        printf "✅ %-20s 등록 완료\n" "github"
-        MCP_LIST="$(claude mcp list 2>/dev/null)"
     else
-        printf "❌ %-20s 등록 실패 — 토큰 권한(Contents/Issues/Pull requests/Workflows)을 확인하세요.\n" "github"
+        case "$TOKEN" in
+            ghp_*)
+                echo "⚠️  Classic 토큰(ghp_...)으로 보입니다. 이 프로젝트는 Fine-grained 토큰(github_pat_...)을 표준으로 사용합니다."
+                echo "   발급 방법: integrations/github/setup.md 참고. 그대로 계속 등록을 진행합니다."
+                ;;
+        esac
+        if claude mcp add github -e GITHUB_PERSONAL_ACCESS_TOKEN="$TOKEN" -- npx -y @modelcontextprotocol/server-github >/dev/null 2>&1; then
+            printf "✅ %-20s 등록 완료\n" "github"
+            MCP_LIST="$(claude mcp list 2>/dev/null)"
+        else
+            printf "❌ %-20s 등록 실패 — 토큰 권한(Contents/Issues/Pull requests/Workflows)을 확인하세요.\n" "github"
+        fi
     fi
     unset TOKEN
 fi

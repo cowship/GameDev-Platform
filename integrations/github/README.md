@@ -10,7 +10,7 @@ GameDev-Platform는 GitHub를 코드 버전 관리와 팀 협업의 중심 플�
 
 GitHub는 단순한 코드 저장소가 아니라 Branch 전략, Commit 규칙, PR Review, Issue 관리를 통해 프로젝트 품질과 협업 효율을 유지하는 기반입니다.
 
-향후 GitHub Actions 및 MCP를 통해 Claude Code, Notion과 자동으로 연동됩니다.
+GitHub Actions 기반 self-CI(`automation.md`)가 구축되어 있으며, 향후 MCP를 통해 Claude Code, Notion과 추가로 연동됩니다.
 
 ---
 
@@ -36,8 +36,8 @@ github/
 ├── README.md
 ├── setup.md
 ├── workflow.md
-├── automation.md        (Planned)
-└── templates.md         (Planned)
+├── automation.md
+└── templates.md
 ```
 
 ---
@@ -48,6 +48,8 @@ github/
 |----------|-------------|
 | setup.md | GitHub 계정, SSH, Repository 초기 설정 |
 | workflow.md | Branch 전략, Commit Convention, PR/Review 프로세스 |
+| automation.md | GameDev-Platform 자신을 검증하는 GitHub Actions self-CI 전략 |
+| templates.md | Stage 6 게임 프로젝트 Repository용 Issue/PR Template, Notion 연동 규칙 |
 
 ---
 
@@ -55,8 +57,6 @@ github/
 
 향후 다음 항목을 추가할 예정입니다.
 
-- GitHub Actions 기반 CI/CD (`automation.md`)
-- Issue / PR Template 및 Notion 연동 규칙 (`templates.md`)
 - MCP를 통한 Claude Code 자동 연동
 
 ---

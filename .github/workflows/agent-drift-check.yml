@@ -1,0 +1,33 @@
+name: Agent Drift Check
+
+# agents/*.md(Source) ↔ .claude/agents/*.md(Adapter) ↔ .claude/commands/*.md(Dispatcher)
+# 3계층 사이의 이름/링크 드리프트를 scripts/check_agent_drift.sh로 점검한다 (ADR 0001, 0002 참고).
+#
+# 이 워크플로는 머지를 막는 게이트가 아니라, 3개 파일을 사람이 수동으로 동시에
+# 맞춰야 하는 구조에서 생기는 드리프트를 push 이후 바로 잡아내는 사후 안전망이다.
+
+on:
+  pull_request:
+    paths:
+      - "agents/**"
+      - ".claude/agents/**"
+      - ".claude/commands/**"
+      - "scripts/check_agent_drift.sh"
+  push:
+    branches: [main]
+    paths:
+      - "agents/**"
+      - ".claude/agents/**"
+      - ".claude/commands/**"
+      - "scripts/check_agent_drift.sh"
+  workflow_dispatch:
+
+jobs:
+  agent-drift:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run check_agent_drift.sh
+        run: bash scripts/check_agent_drift.sh

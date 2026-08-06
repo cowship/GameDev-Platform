@@ -54,17 +54,13 @@ mcp/
 |---|---|
 | [notion](../notion/README.md) | Notion Database/Page 접근 |
 | [github](../github/README.md) | Repository/Issue/PR 접근 |
-| [unity](../unity/README.md) | (Planned) Unity Editor 연동 |
+| [unity](../unity/README.md) | Unity Editor 연동 |
 
 ---
 
 # Future Plans
 
-향후 다음 항목을 추가할 예정입니다.
-
-- Unity MCP 연동 (실제 Unity 프로젝트 생성 이후 — 절차는 [servers.md](servers.md#unity-mcp)에 문서화됨, 등록은 대기 중)
-
-> GitHub, Filesystem, Sequential Thinking, Notion, Context7 MCP는 연동 완료되었습니다. 자세한 내용은 [servers.md](servers.md)를 참고합니다.
+GitHub, Filesystem, Sequential Thinking, Notion, Context7, Unity MCP 모두 연동 완료되었습니다. 자세한 내용(연결 방식, 팀원 온보딩 체크리스트 포함)은 [servers.md](servers.md#unity-mcp)를 참고합니다.
 
 ---
 

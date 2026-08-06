@@ -19,7 +19,7 @@ MCP(Model Context Protocol)는 Claude Code가 외부 시스템(GitHub, Notion �
 | Sequential Thinking | 도구 1개(`sequentialthinking`), 부작용 없는 순수 추론 보조 | Connected |
 | Notion | 읽기/쓰기 혼재 | Connected |
 | Context7 | 도구 2개(라이브러리 문서 검색/조회), 부작용 없는 읽기 전용 | Connected — 6개 Agent 전체 허용 |
-| Unity MCP | Unity Editor 상태 조회 + Editor 조작(Scene/Script 등) | Planned — Unity 프로젝트 생성 후 등록 예정 |
+| Unity MCP | Unity Editor 상태 조회 + Editor 조작(Scene/Script 등) | Connected |
 
 세부 등록 명령/인증 방식은 [integrations/mcp/servers.md](../../integrations/mcp/servers.md)를 참고합니다.
 

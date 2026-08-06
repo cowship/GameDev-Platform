@@ -88,18 +88,27 @@
 | 항목 | 내용 |
 |---|---|
 | 성격 | Unity Editor(런타임 상태, Scene, Console 등)를 Claude Code가 직접 조회/조작하도록 연결하는 서버 |
-| 선택된 방식 | Unity 공식 MCP (Unity 6000.0+ 내장 `com.unity.ai.assistant` 패키지, Editor 자체가 서버 역할) |
+| 선택된 방식 | Unity 공식 MCP (Unity 6000.0+ 내장 `com.unity.ai.assistant` 패키지). Editor 시작 시 패키지가 Bridge를 띄우고, 플랫폼별 relay 실행 파일(`~/.unity/relay/relay_win.exe`)을 통해 stdio로 연결하는 방식을 실제로 사용 중 |
+| 서버 이름 | `unity-mcp` |
+| Transport | Local (stdio) |
 | 실행 위치 | Unity Editor가 설치된 Windows 환경 (본 Repository의 Claude Code는 WSL에서 실행 중이라 환경이 분리되어 있음) |
-| 상태 | **대기** — 아직 Unity 프로젝트가 생성되지 않아 실제 등록 불가 |
+| 등록 명령 | `claude mcp add unity-mcp -- <relay_win.exe 경로> --mcp` (`scripts/setup_unity_workspace.sh`가 자동 탐색 + 등록) |
+| 상태 | **연결 완료** — `claude mcp list`에서 Connected 확인함 (2026-08-06) |
 
-> **자동화**: 아래 1~4단계 중 WSL 쪽 준비(Git LFS, Windows Git Credential Manager 연동, Unity MCP 등록)는 `scripts/setup_unity_workspace.sh`로 자동화되어 있습니다. Unity 프로젝트 생성 후 Editor를 한 번 실행한 뒤 이 스크립트를 실행하면 됩니다 (여러 번 실행해도 안전).
+> **자동화**: 아래 1~4단계 중 WSL 쪽 준비(Git LFS, Windows Git Credential Manager 연동, Unity MCP 등록)는 `scripts/setup_unity_workspace.sh`로 자동화되어 있습니다 (여러 번 실행해도 안전).
 
-**연결 전 필요한 것**:
+**연결 범위 — 계정이 아니라 "그 순간 열려 있는 Unity 프로젝트" 기준입니다**
 
-1. Unity 프로젝트 생성 (Unity 6000.0 이상, `com.unity.ai.assistant` 패키지 포함 여부 확인 — 없으면 Package Manager에서 추가)
-2. Unity Editor: `Edit > Project Settings > AI > Unity MCP` 에서 Unity Bridge 상태가 초록색 `Running`인지 확인 (Editor 시작 시 자동 실행됨)
-3. 같은 화면에서 Claude Code용 연결 설정(Config 스니펫 또는 릴레이 실행 파일 경로)을 **그 시점에 Editor가 보여주는 그대로** 복사해서 사용 — 패키지 버전에 따라 `http://localhost:<port>/mcp` 형태이거나 플랫폼별 relay 실행 파일(`~/.unity/relay/...`)을 쓰는 방식일 수 있어, 오래된 블로그 글의 설정값을 그대로 베끼지 않고 Editor가 보여주는 최신 안내를 기준으로 삼습니다.
-4. Claude Code에서 세션을 시작하면 Unity MCP 설정 창의 "Pending Connections"에 연결 요청이 뜨고, 여기서 **Accept**해야 실제로 연결됩니다.
+- relay 실행 파일과 Claude Code `mcpServers` 등록은 **Windows 사용자 계정/머신 단위**로 각자 설치해야 합니다 (relay를 여러 사람이 공유하지 않음).
+- 하지만 relay가 실제로 어떤 게임 데이터를 조작하는지는 **그 순간 Unity Editor에서 열려 있는 프로젝트**로 결정됩니다. `com.unity.ai.assistant` 패키지가 프로젝트를 열 때마다 `C:\Users\<사용자>\.unity\mcp\connections\`에 자기 접속 정보를 등록하고, relay는 이를 보고 연결합니다.
+- 따라서 팀원이 같은 프로토타입 콘텐츠를 Claude와 함께 다루려면, relay를 각자 설치하는 것과 별개로 **프로토타입 Unity 프로젝트(레포)를 그대로 클론해서 열어야** 합니다. 다른/빈 프로젝트를 열면 Claude는 그 프로젝트를 보게 됩니다.
+
+**새 팀원 온보딩 체크리스트** (사람이 직접 해야 하는 GUI 단계 포함 — 완전 자동화 불가):
+
+1. 프로토타입 레포 클론 (Unity MCP 패키지가 `Packages/manifest.json`에 포함돼 있는지 확인 — 포함돼 있어야 2번에서 relay가 자동 생성됨)
+2. **[사람이 직접]** Unity Editor(6000.0+)로 그 프로젝트를 최소 1회 실행 → `Edit > Project Settings > AI > Unity MCP`에서 Bridge가 초록색 `Running`인지 확인 (`relay_win.exe`가 이때 처음 생성됨)
+3. WSL 환경이면 GameDev-Platform 레포에서 `./scripts/setup_unity_workspace.sh` 실행 → Mirrored Networking 점검 + relay 자동 탐색/등록까지 처리 (Claude Code에게 이 스크립트 실행을 요청하면 됨)
+4. Claude Code 세션 재시작 → **[사람이 직접]** Unity Editor의 "Pending Connections"에서 **Accept** (자동화 불가)
 
 **WSL ↔ Windows 네트워크 주의사항**:
 

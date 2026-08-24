@@ -75,26 +75,33 @@ else
 fi
 echo
 
-# 4) Unity MCP 등록 (Unity 프로젝트가 이미 생성되어 있고 Editor가 최소 1회 실행된 경우)
-echo "4) Unity MCP 등록"
+# 4) Unity MCP 등록 (Unity CLI 기반, Unity Hub 43.4.0+가 자동 설치)
+# 배경: 기존 relay_win.exe(in-Editor MCP Bridge) 방식은 Unity가 폐기 예고하여
+# Unity CLI의 MCP Mode(`unity mcp`)로 전환했습니다. integrations/mcp/servers.md 'Unity MCP' 참고.
+echo "4) Unity MCP 등록 (Unity CLI 기반)"
 echo "----------------------------------------"
 if ! command -v claude >/dev/null 2>&1; then
     echo "❌ Claude Code CLI를 찾을 수 없어 건너뜁니다."
 else
-    if claude mcp list 2>/dev/null | grep -qE "^unity-mcp:"; then
-        echo "✅ unity-mcp가 이미 등록되어 있습니다."
+    if claude mcp list 2>/dev/null | grep -qE "^unity-editor-mcp:"; then
+        echo "✅ unity-editor-mcp가 이미 등록되어 있습니다."
     else
-        RELAY_PATH="$(find /mnt/c/Users/*/.unity/relay -maxdepth 1 -iname "relay_win.exe" 2>/dev/null | head -n 1)"
-        if [ -n "$RELAY_PATH" ]; then
-            if claude mcp add unity-mcp -- "$RELAY_PATH" --mcp >/dev/null 2>&1; then
-                echo "✅ unity-mcp 등록 완료: $RELAY_PATH"
+        UNITY_CLI_PATH="$(find /mnt/c/Users/*/AppData/Local/Unity/bin -maxdepth 1 -iname "unity.exe" 2>/dev/null | head -n 1)"
+        if [ -n "$UNITY_CLI_PATH" ]; then
+            if claude mcp add --scope user --transport stdio unity-editor-mcp -- "$UNITY_CLI_PATH" mcp >/dev/null 2>&1; then
+                echo "✅ unity-editor-mcp 등록 완료: $UNITY_CLI_PATH"
             else
-                echo "❌ unity-mcp 등록 실패. 'claude mcp add unity-mcp -- \"$RELAY_PATH\" --mcp' 를 직접 실행해보세요."
+                echo "❌ unity-editor-mcp 등록 실패. 'claude mcp add --scope user --transport stdio unity-editor-mcp -- \"$UNITY_CLI_PATH\" mcp' 를 직접 실행해보세요."
             fi
         else
-            echo "ℹ️  relay_win.exe를 찾지 못했습니다. Unity Editor를 한 번 열어서"
-            echo "   Project Settings > AI > Unity MCP 화면에서 Bridge가 Running인지 먼저 확인한 뒤 이 스크립트를 다시 실행하세요."
+            echo "ℹ️  Unity CLI(unity.exe)를 찾지 못했습니다. Unity Hub(43.4.0 이상)를 실행해"
+            echo "   CLI가 자동 설치되게 한 뒤 이 스크립트를 다시 실행하세요."
+            echo "   (수동 확인: Windows에서 %LOCALAPPDATA%\\Unity\\bin\\unity.exe 존재 여부)"
         fi
+    fi
+
+    if claude mcp list 2>/dev/null | grep -qE "^unity-mcp:"; then
+        echo "⚠️  구 방식(unity-mcp, relay_win.exe)이 아직 등록되어 있습니다. 'claude mcp remove unity-mcp'로 정리하세요."
     fi
 fi
 echo

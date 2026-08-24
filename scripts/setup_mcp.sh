@@ -96,12 +96,12 @@ else
 fi
 echo
 
-echo "4) Unity MCP (수동 단계 — Unity 프로젝트 필요)"
+echo "4) Unity MCP (수동 단계 — Unity CLI + 프로젝트 필요)"
 echo "----------------------------------------"
-echo "ℹ️  Unity 프로젝트를 만들고 Editor를 한 번 실행한 뒤 아래를 실행하세요:"
+echo "ℹ️  Unity 프로젝트를 만들고 Editor를 한 번 실행한 뒤(Unity Hub가 Unity CLI를 자동 설치합니다) 아래를 실행하세요:"
 echo "   ./scripts/setup_unity_workspace.sh"
 echo "   (WSL Mirrored Networking 확인, Git LFS 설치, Windows Git Credential Manager 연동,"
-echo "    Unity MCP 자동 등록까지 한 번에 처리합니다. 여러 번 실행해도 안전합니다.)"
+echo "    Unity CLI 기반 MCP(unity-editor-mcp) 자동 등록까지 한 번에 처리합니다. 여러 번 실행해도 안전합니다.)"
 echo
 
 echo "========================================"

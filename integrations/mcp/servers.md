@@ -88,31 +88,40 @@
 | 항목 | 내용 |
 |---|---|
 | 성격 | Unity Editor(런타임 상태, Scene, Console 등)를 Claude Code가 직접 조회/조작하도록 연결하는 서버 |
-| 선택된 방식 | Unity 공식 MCP (Unity 6000.0+ 내장 `com.unity.ai.assistant` 패키지). Editor 시작 시 패키지가 Bridge를 띄우고, 플랫폼별 relay 실행 파일(`~/.unity/relay/relay_win.exe`)을 통해 stdio로 연결하는 방식을 실제로 사용 중 |
-| 서버 이름 | `unity-mcp` |
+| 선택된 방식 | **Unity CLI의 MCP Mode** (`unity mcp`). Unity Hub(43.4.0+)가 자동 설치하는 독립 CLI 바이너리가 Editor 안의 Pipeline 패키지와 통신하고, Claude Code에는 stdio로 붙는다 |
+| 서버 이름 | `unity-editor-mcp` |
 | Transport | Local (stdio) |
-| 실행 위치 | Unity Editor가 설치된 Windows 환경 (본 Repository의 Claude Code는 WSL에서 실행 중이라 환경이 분리되어 있음) |
-| 등록 명령 | `claude mcp add unity-mcp -- <relay_win.exe 경로> --mcp` (`scripts/setup_unity_workspace.sh`가 자동 탐색 + 등록) |
-| 상태 | **연결 완료** — `claude mcp list`에서 Connected 확인함 (2026-08-06) |
+| Scope | **user**(전역) — 이 Windows 계정에서 여는 모든 Unity 프로젝트에 공용으로 재사용됨 (프로젝트별 등록 아님) |
+| 실행 위치 | Unity CLI가 설치된 Windows 환경 (본 Repository의 Claude Code는 WSL에서 실행 중이라 WSL 경로(`/mnt/c/...`)로 바이너리를 직접 지정해서 등록) |
+| CLI 바이너리 경로 | `%LOCALAPPDATA%\Unity\bin\unity.exe` → WSL에서는 `/mnt/c/Users/<사용자>/AppData/Local/Unity/bin/unity.exe` |
+| 등록 명령 | `claude mcp add --scope user --transport stdio unity-editor-mcp -- "<unity.exe 경로>" mcp` (`scripts/setup_unity_workspace.sh`가 자동 탐색 + 등록) |
+| 상태 | **연결 완료** — `claude mcp list`에서 Connected 확인함 (2026-08-25) |
 
-> **자동화**: 아래 1~4단계 중 WSL 쪽 준비(Git LFS, Windows Git Credential Manager 연동, Unity MCP 등록)는 `scripts/setup_unity_workspace.sh`로 자동화되어 있습니다 (여러 번 실행해도 안전).
+> 폐기된 이전 방식: 기존에는 Unity 6000.0+ 내장 `com.unity.ai.assistant` 패키지의 in-Editor MCP Bridge + `relay_win.exe`를 사용했으나(서버 이름 `unity-mcp`), Unity가 in-Editor MCP server를 폐기하고 Unity CLI로 대체한다고 공식 발표(2026-08)함에 따라 프로젝트 시작 전인 이 시점에 미리 CLI 방식으로 전환했습니다. `unity-mcp`/relay 등록은 제거됨.
+>
+> Unity 공식 `unity mcp configure claude-code` 명령은 `claude mcp add --scope user --transport stdio unity-editor-mcp unity mcp`를 실행하려 시도하지만, 이는 Claude Code와 Unity CLI가 같은 OS에서 도는 걸 전제로 `unity`가 PATH에 있다고 가정합니다. WSL 환경에서는 `unity`가 PATH에 없으므로(Windows 바이너리) 위처럼 WSL에서 보이는 전체 경로로 직접 등록해야 합니다.
+
+> **자동화**: 아래 1~5단계 중 WSL 쪽 준비(Git LFS, Windows Git Credential Manager 연동, Unity MCP 등록)는 `scripts/setup_unity_workspace.sh`로 자동화되어 있습니다 (여러 번 실행해도 안전).
 
 **연결 범위 — 계정이 아니라 "그 순간 열려 있는 Unity 프로젝트" 기준입니다**
 
-- relay 실행 파일과 Claude Code `mcpServers` 등록은 **Windows 사용자 계정/머신 단위**로 각자 설치해야 합니다 (relay를 여러 사람이 공유하지 않음).
-- 하지만 relay가 실제로 어떤 게임 데이터를 조작하는지는 **그 순간 Unity Editor에서 열려 있는 프로젝트**로 결정됩니다. `com.unity.ai.assistant` 패키지가 프로젝트를 열 때마다 `C:\Users\<사용자>\.unity\mcp\connections\`에 자기 접속 정보를 등록하고, relay는 이를 보고 연결합니다.
-- 따라서 팀원이 같은 프로토타입 콘텐츠를 Claude와 함께 다루려면, relay를 각자 설치하는 것과 별개로 **프로토타입 Unity 프로젝트(레포)를 그대로 클론해서 열어야** 합니다. 다른/빈 프로젝트를 열면 Claude는 그 프로젝트를 보게 됩니다.
+- CLI 바이너리와 Claude Code `mcpServers` 등록은 **Windows 사용자 계정/머신 단위**로 각자 설치해야 합니다 (relay와 마찬가지로 공유하지 않음).
+- 실제로 어떤 게임 데이터를 조작하는지는 **그 순간 Unity Editor에서 열려 있는 프로젝트**로 결정됩니다. `unity status` 명령으로 현재 CLI가 인식하는 연결된 Editor 목록(포트/프로젝트 경로/버전/PID)을 확인할 수 있습니다.
+- 따라서 팀원이 같은 프로토타입 콘텐츠를 Claude와 함께 다루려면, CLI를 각자 설치하는 것과 별개로 **프로토타입 Unity 프로젝트(레포)를 그대로 클론해서 열어야** 합니다. 다른/빈 프로젝트를 열면 Claude는 그 프로젝트를 보게 됩니다.
 
 **새 팀원 온보딩 체크리스트** (사람이 직접 해야 하는 GUI 단계 포함 — 완전 자동화 불가):
 
-1. 프로토타입 레포 클론 (Unity MCP 패키지가 `Packages/manifest.json`에 포함돼 있는지 확인 — 포함돼 있어야 2번에서 relay가 자동 생성됨)
-2. **[사람이 직접]** Unity Editor(6000.0+)로 그 프로젝트를 최소 1회 실행 → `Edit > Project Settings > AI > Unity MCP`에서 Bridge가 초록색 `Running`인지 확인 (`relay_win.exe`가 이때 처음 생성됨)
-3. WSL 환경이면 GameDev-Platform 레포에서 `./scripts/setup_unity_workspace.sh` 실행 → Mirrored Networking 점검 + relay 자동 탐색/등록까지 처리 (Claude Code에게 이 스크립트 실행을 요청하면 됨)
-4. Claude Code 세션 재시작 → **[사람이 직접]** Unity Editor의 "Pending Connections"에서 **Accept** (자동화 불가)
+1. 프로토타입 레포 클론
+2. **[사람이 직접]** Unity Editor(6000.0+, 이번 전환의 최소 요구 버전)로 그 프로젝트를 최소 1회 실행
+3. **[사람이 직접 또는 스크립트]** 해당 프로젝트에 Unity Pipeline 패키지 설치: `unity pipeline install --project-path <프로젝트 경로>` (기존 `com.unity.ai.assistant` 패키지 대신 이 패키지가 CLI와 Editor를 연결하는 역할을 함)
+4. WSL 환경이면 GameDev-Platform 레포에서 `./scripts/setup_unity_workspace.sh` 실행 → Mirrored Networking 점검 + Unity CLI 자동 탐색/등록까지 처리 (Claude Code에게 이 스크립트 실행을 요청하면 됨)
+5. Claude Code 세션 재시작 → `unity status`로 Editor가 목록에 뜨는지 확인
 
-**WSL ↔ Windows 네트워크 주의사항**:
+> 아직 실측 검증 안 된 부분: 위 3~5단계는 실제 Unity 프로젝트가 아직 없어(2026-08-25 기준 프로젝트 시작 전) 처음부터 끝까지 실제로 붙여보지는 못했습니다. 첫 Unity 프로젝트를 만들 때 Pipeline 패키지 설치 및 Editor 연결 과정에서 이전 방식에 있던 "Pending Connections 수동 Accept" 같은 추가 확인 단계가 남아있는지 다시 확인하고 이 섹션을 갱신해야 합니다.
 
-Unity Bridge는 기본적으로 `127.0.0.1`(로컬호스트)에만 바인딩되어 외부 네트워크에서 접근할 수 없습니다. 이 Repository의 Claude Code는 WSL2(NAT 모드, `.wslconfig`에 `networkingMode=mirrored` 미설정) 안에서 실행 중이라, WSL의 `localhost`와 Windows의 `localhost`가 서로 다른 주소로 취급되어 **기본 설정으로는 Unity MCP에 연결되지 않을 가능성이 높습니다.** 확인된 Windows 빌드(10.0.26200)는 Mirrored Networking을 지원하므로, Unity 프로젝트 생성 후 다음 중 하나를 선택합니다.
+**WSL ↔ Windows 네트워크 주의사항** (relay 시절에 확인된 내용 — Unity CLI 방식에서도 재현되는지는 미검증):
+
+Unity Editor 내부 Bridge(구 방식) 및 Pipeline 패키지(신규 방식으로 추정)는 기본적으로 `127.0.0.1`(로컬호스트)에만 바인딩되어 외부 네트워크에서 접근할 수 없습니다. 이 Repository의 Claude Code는 WSL2(NAT 모드, `.wslconfig`에 `networkingMode=mirrored` 미설정) 안에서 실행 중이라, WSL의 `localhost`와 Windows의 `localhost`가 서로 다른 주소로 취급되어 **기본 설정으로는 연결되지 않을 가능성이 높습니다.** 다만 Unity CLI 바이너리 자체는 Windows 프로세스로 실행되므로(WSL은 프로세스만 실행시킬 뿐), CLI ↔ Editor 구간은 순수 Windows 내부 통신이라 이 문제가 아예 없을 수도 있습니다 — 첫 연결 시 실제로 막히는지 확인이 필요합니다. 확인된 Windows 빌드(10.0.26200)는 Mirrored Networking을 지원하므로, 문제가 재현되면 Unity 프로젝트 생성 후 다음 중 하나를 선택합니다.
 
 - **(권장) WSL Mirrored Networking 활성화**: Windows 사용자 홈의 `.wslconfig`에 아래 내용을 추가한 뒤 PowerShell에서 `wsl --shutdown` 실행 (현재 세션도 함께 종료되므로 재시작 필요)
   ```ini

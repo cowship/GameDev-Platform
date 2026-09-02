@@ -151,9 +151,19 @@ Conventional Commits를 따릅니다. (`main`으로 가는 브랜치에만 적�
 
 Unity는 텍스트 코드보다 **파일 충돌에 훨씬 취약**합니다. 아래 4가지만 지켜도 사고의 대부분이 사라집니다.
 
-## 4.1 `.meta` 파일은 항상 함께 커밋합니다
+## 4.1 Asset 추가·이동·삭제는 Unity 에디터 안에서 합니다
 
-`.meta`에는 Asset의 GUID가 들어 있습니다. 누락되면 다른 팀원의 프로젝트에서 참조가 전부 끊어집니다(Missing Reference). `git add`할 때 `.meta`가 빠지지 않았는지 확인하세요.
+`.meta`에는 Asset의 GUID가 들어 있고, Unity는 이 GUID로 "이 스크립트가 저 오브젝트에 붙어 있다"를 기억합니다. GUID가 어긋나면 다른 팀원의 프로젝트에서 참조가 끊어집니다(Missing Reference).
+
+`.gitignore`에 `.meta` 제외 규칙이 없으므로 **`git add .` → commit 하는 평범한 흐름에서는 `.meta`가 알아서 따라옵니다.** 문제가 되는 건 아래 세 가지 경우뿐입니다.
+
+| 상황 | 결과 | 대응 |
+|---|---|---|
+| Unity를 켜지 않고 파일만 폴더에 복사해 커밋 | `.meta`가 아직 생성되지 않은 상태로 올라감 → 팀원마다 **서로 다른 GUID**가 생겨 참조가 갈라짐 | 커밋 전에 Unity를 한 번 열어 Import를 끝냅니다 |
+| 탐색기나 `mv`/`rm`으로 파일 이동·삭제 | `.meta`만 남아 고아가 되거나, 이동한 파일이 새 GUID를 받음 | Project 창에서 드래그/삭제합니다 |
+| 경로를 지정해 add (`git add Player.cs`), GUI에서 파일을 하나씩 스테이징 | 짝인 `Player.cs.meta`가 빠짐 | 폴더 단위로 add 하거나 `git status`로 짝을 확인합니다 |
+
+즉 지켜야 할 규칙은 "`.meta`를 잊지 말자"가 아니라 **"Asset 조작은 Unity 안에서, 커밋 전에 에디터를 한 번 열어둔다"** 입니다.
 
 ## 4.2 하나의 Scene은 한 번에 한 명만 수정합니다
 
@@ -240,7 +250,7 @@ git checkout --theirs game/Assets/Scenes/Main.unity   # 상대 버전 채택
 ## 리뷰할 때 보는 것
 
 - 동작이 요구사항을 만족하는가
-- `.meta` 누락이 없는가
+- Asset이 추가/이동/삭제되었다면 `.meta`가 짝으로 함께 올라왔는가 (고아 `.meta`, 짝 없는 Asset이 없는가)
 - Scene/Prefab 변경이 의도한 범위인가 (의도치 않은 대량 변경은 대개 사고입니다)
 - 네트워크 코드라면: 권한(Authority) 판단이 올바른가, 클라이언트가 임의로 상태를 바꾸지 않는가
 - 폴더 의존성 방향을 지켰는가 ([project_template.md](../../integrations/unity/project_template.md#폴더-간-의존성-방향))

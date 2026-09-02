@@ -283,38 +283,41 @@ git checkout --theirs game/Assets/Scenes/Main.unity   # 상대 버전 채택
 
 # 6. 역할 분담
 
-리뷰 자동 배정([.github/CODEOWNERS](../../.github/CODEOWNERS))과 짝을 이룹니다. 팀 상황에 맞게 채워 넣고, CODEOWNERS의 주석을 해제하세요.
-
-## 개발팀
+리뷰 자동 배정([.github/CODEOWNERS](../../.github/CODEOWNERS))과 짝을 이룹니다. 담당은 "그 영역을 혼자 만든다"가 아니라 **"그 영역 변경 PR을 반드시 한 번 본다"**는 뜻입니다.
 
 | 영역 | 경로 | 담당 |
 |---|---|---|
-| 네트워크 (NGO) | `game/Assets/Scripts/Networking/` | (미정) |
-| 게임플레이 | `game/Assets/Scripts/Gameplay/` | (미정) |
-| UI | `game/Assets/Scripts/UI/` | (미정) |
 | 플랫폼/인프라 | `scripts/`, `.github/`, `docs/`, `game/ProjectSettings/` | @ajunlee0 |
 
 **개발팀 계정**: `@cowship` `@ajunlee0` `@turing081226` `@sjy084` `@shlzzz`
+**그래픽 팀 계정**: (합류 시 추가)
 
-## 그래픽 팀
+## 게임 코드와 자산에는 아직 담당이 없습니다
 
-그래픽 팀은 `game/Assets/` 아래 **자산 폴더에만** 커밋합니다. `Scripts/`, `ProjectSettings/`, `Packages/`는 건드리지 않습니다.
+`game/Assets/Scripts/` 이하와 아트·사운드는 **일부러 비워둔 상태**입니다. 이유는 두 가지입니다.
 
-| 영역 | 경로 | 담당 |
-|---|---|---|
-| 아트 (스프라이트, 텍스처) | `game/Assets/Art/` | (미정) |
-| 사운드 (BGM, SFX) | `game/Assets/Audio/` | (미정) |
-| UI 자산 | `game/Assets/Art/UI/` | (미정) |
+- 기획이 확정되지 않아 **각 영역에 일이 얼마나 생길지 모릅니다.** 먼저 나누면 일이 없는 사람과 몰리는 사람이 생기고, 표만 남고 안 지켜집니다.
+- 초반에는 여러 명이 같은 영역을 만져보는 편이 학습에 낫습니다. 담당을 나누면 각자 자기 영역만 보게 되어 전체 구조를 아무도 모르게 됩니다.
 
-**그래픽 팀 계정**: (채워 넣기)
+대신 **사고가 크게 나는 영역(공용 설정, 스크립트, 워크플로)에는 담당이 이미 지정돼 있습니다.** 역할 분담의 실질적 목적은 이 방어선이고, 그건 위 표와 CODEOWNERS에 서 있습니다. 나머지 PR은 담당자 없이 "본인 외 1명 Approve" 규칙으로 운영합니다.
+
+> ⚠️ **비어 있다고 아무 이름이나 채우지 마세요.** CODEOWNERS는 실제로 리뷰 요청을 보냅니다. 모르는 영역에 배정된 사람은 내용을 안 보고 Approve하게 되고, 그때부터 리뷰는 형식이 됩니다.
+
+### 언제 채우나
+
+해당 폴더에 각자의 작업이 실제로 쌓이기 시작하면, 그때 **이미 그 영역을 만지고 있는 사람**을 담당으로 적습니다. 미리 정하는 게 아니라 사후에 기록하는 쪽이 맞습니다. 채울 때는 위 표와 [.github/CODEOWNERS](../../.github/CODEOWNERS)의 주석을 **함께** 풉니다.
+
+## 그래픽 팀의 작업 범위
+
+담당은 아직 없지만, **어디에 커밋하는지는 지금 정해져 있습니다.** 그래픽 팀은 `game/Assets/` 아래 **자산 폴더에만** 커밋합니다. `Scripts/`, `ProjectSettings/`, `Packages/`는 건드리지 않습니다.
+
+| 영역 | 경로 |
+|---|---|
+| 아트 (스프라이트, 텍스처) | `game/Assets/Art/` |
+| UI 자산 | `game/Assets/Art/UI/` |
+| 사운드 (BGM, SFX) | `game/Assets/Audio/` |
 
 **경합을 줄이는 방법은 lock이 아니라 폴더 분리입니다.** 담당별로 하위 폴더를 나눠 두면(`Art/Character/`, `Art/UI/`, `Audio/BGM/` 등) 같은 파일을 두고 부딪힐 일이 애초에 생기지 않습니다. `git lfs lock`(4.3)은 그래도 겹칠 때를 위한 안전장치입니다.
-
----
-
-담당이 정해지면 위 표와 [.github/CODEOWNERS](../../.github/CODEOWNERS)를 함께 갱신합니다.
-
-담당은 "그 영역을 혼자 만든다"가 아니라 **"그 영역 변경 PR을 반드시 한 번 본다"**는 뜻입니다.
 
 ---
 

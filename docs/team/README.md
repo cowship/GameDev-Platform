@@ -218,7 +218,7 @@ git checkout --theirs game/Assets/Scenes/Main.unity   # 상대 버전 채택
 | 사운드 | `game/Assets/Audio/` | (미정) |
 | 플랫폼/인프라 | `scripts/`, `.github/`, `docs/`, `game/ProjectSettings/` | @ajunlee0 |
 
-**팀원 계정**: `@cowship` `@ajunlee0` `@turing081226` `@sjy084` (+ 미확인 1명 — [.github/CODEOWNERS](../../.github/CODEOWNERS)의 "확인 필요" 참고)
+**팀원 계정**: `@cowship` `@ajunlee0` `@turing081226` `@sjy084` `@shlzzz`
 
 담당이 정해지면 위 표와 [.github/CODEOWNERS](../../.github/CODEOWNERS)를 함께 갱신합니다.
 

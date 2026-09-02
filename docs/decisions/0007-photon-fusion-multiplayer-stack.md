@@ -21,15 +21,18 @@ Accepted (2026-09-02)
 
 2. **2D + URP 템플릿(`com.unity.template.2d-cross-platform`)을 기준으로 프로젝트를 구성한다.** HDRP는 팀원 5명의 PC 사양이 제각각인 상황에서 부담이 크고, Render Pipeline은 나중에 바꾸기 어려운 선택이라 착수 시점에 확정했다.
 
-3. **프로젝트를 Unity Hub GUI가 아니라 Editor에 내장된 템플릿 패키지를 추출해 생성한다.** Hub가 만드는 결과물과 동일한 `Assets`/`Packages`/`ProjectSettings`를 얻으면서, 생성 과정이 재현 가능하고 리뷰 가능한 형태로 남는다.
+3. **프로젝트를 Unity Hub GUI가 아니라 Editor에 내장된 템플릿 패키지를 추출해 생성한다.** 생성 과정이 재현 가능하고 리뷰 가능한 형태로 남는다.
+
+   > **패키지 버전은 템플릿이 아니라 Editor의 권장 목록을 따른다.** Editor에 동봉된 템플릿(`com.unity.template.2d-cross-platform-2d-6.1.6`)의 `manifest.json`은 Editor 6000.3.22f1이 권장하는 버전보다 오래되어 있었고, 그대로 쓰면 컴파일이 깨진다(실측: Input System 1.12.0이 Unity 6.3에서 제거된 `BuildTarget.ReservedCFE`를 참조 → `InputSystemPluginControl.cs(47,25): error CS0117`). Unity Hub는 프로젝트 생성 시 Editor의 권장 목록으로 버전을 해석하므로, 템플릿 manifest를 그대로 복사하면 안 된다. Single Source of Truth는 `<Editor>/Data/Resources/PackageManager/Editor/manifest.json`이다.
 
 4. **패키지 구성은 템플릿 기준선에 아래 조정을 적용한다.**
 
    | 조정 | 내용 | 근거 |
    |---|---|---|
-   | 추가 | `com.unity.addressables` 2.10.2 | ADR 0004의 필수 패키지 5종 충족. 2.10.2는 `unity: 6000.0` 요구로 6.3.x와 호환 |
+   | 기준 | Editor 6000.3.22f1의 권장 버전 목록 (`<Editor>/Data/Resources/PackageManager/Editor/manifest.json`) | 위 주의사항 참고. 임의로 최신화하지도, 템플릿 값을 그대로 쓰지도 않는다 |
+   | 추가 | `com.unity.addressables` 2.9.1 | ADR 0004의 필수 패키지 5종 충족. Editor 권장 버전을 그대로 사용 |
    | 제거 | `com.unity.collab-proxy` | Unity Version Control(Plastic SCM)용. 이 팀은 Git을 쓰므로 두 개의 버전 관리 UI가 공존하면 혼선만 생긴다 |
-   | 유지 | URP 17.0.3, Input System 1.12.0, Test Framework 1.4.5, ugui 2.0.0, 2D 패키지 일체 | 템플릿이 지정한 버전을 그대로 사용. 임의 최신화하지 않는다(`setup.md`의 버전 고정 원칙) |
+   | 내장 | URP 17.3.0, Test Framework 1.6.0 | Editor의 `BuiltInPackages`에 동봉되어 있어 공개 레지스트리에서는 조회되지 않는다(정상). manifest에 명시해도 로컬에서 해석된다 |
 
    ADR 0004가 필수로 지정한 `com.unity.textmeshpro`는 별도 추가하지 않는다. Unity 6부터 TextMeshPro는 `com.unity.ugui` 2.0.0에 통합되어 있어, 별도 패키지를 넣으면 오히려 중복이 된다.
 
@@ -60,11 +63,12 @@ Accepted (2026-09-02)
 **단점**
 - Fusion SDK import와 App Id 입력은 자동화할 수 없어 수동 절차로 남는다(`integrations/photon/setup.md`).
 - Fusion SDK를 커밋하면 저장소 용량이 크게 늘고, SDK 업데이트 시 대량 변경 커밋이 발생한다.
-- Addressables 2.10.2와 URP 17.0.3 조합은 이 프로젝트에서 아직 실사용 검증되지 않았다. 첫 빌드 시점에 문제가 드러날 수 있다.
+- 패키지 조합은 첫 빌드까지 가 보아야 완전히 검증된다. Editor 권장 목록을 따랐으므로 컴파일 단계의 위험은 크게 줄었다.
 - `Scripts/Networking/` 추가로 ADR 0004의 5개 카테고리 표준에서 벗어났다. 다음 프로젝트에서 이 카테고리를 표준에 정식 편입할지 판단이 필요하다.
 
 **후속 작업**
 - 게임 제목이 정해지면 `game/ProjectSettings/ProjectSettings.asset`의 `productName`(현재 임시값 `FusionGame`)과 `applicationIdentifier`를 갱신한다.
 - Fusion SDK import 후 실제 접속 테스트를 거쳐 `integrations/photon/setup.md`의 절차를 실측 검증한다.
 - 첫 빌드 이후 Addressables 사용 여부를 재평가한다. 실제로 쓰지 않는다면 제거를 검토하고 ADR 0004의 필수 패키지 목록을 함께 갱신한다.
+- Editor 버전을 올릴 때는 `<Editor>/Data/Resources/PackageManager/Editor/manifest.json`을 다시 읽어 `game/Packages/manifest.json`을 함께 갱신한다. 이 두 파일이 어긋나면 컴파일이 깨진다.
 - `Scripts/Networking/` 카테고리를 `integrations/unity/project_template.md`의 표준 구조에 반영할지 두 번째 프로젝트 시점에 결정한다.

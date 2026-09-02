@@ -92,16 +92,15 @@
 | 서버 이름 | `unity-editor-mcp` |
 | Transport | Local (stdio) |
 | Scope | **user**(전역) — 이 Windows 계정에서 여는 모든 Unity 프로젝트에 공용으로 재사용됨 (프로젝트별 등록 아님) |
-| 실행 위치 | Unity CLI가 설치된 Windows 환경 (본 Repository의 Claude Code는 WSL에서 실행 중이라 WSL 경로(`/mnt/c/...`)로 바이너리를 직접 지정해서 등록) |
-| CLI 바이너리 경로 | `%LOCALAPPDATA%\Unity\bin\unity.exe` → WSL에서는 `/mnt/c/Users/<사용자>/AppData/Local/Unity/bin/unity.exe` |
-| 등록 명령 | `claude mcp add --scope user --transport stdio unity-editor-mcp -- "<unity.exe 경로>" mcp` (`scripts/setup_unity_workspace.sh`가 자동 탐색 + 등록) |
-| 상태 | **연결 완료(Editor까지 실측 검증됨)** — `claude mcp list`에서 Connected, `unity status`에서 Editor `ready` 상태까지 확인함 (2026-08-25) |
+| 실행 위치 | Windows (Claude Code와 Unity CLI가 같은 OS에서 동작) |
+| CLI 바이너리 경로 | `%LOCALAPPDATA%\Unity\bin\unity.exe` — Unity Hub(43.4.0+)가 자동 설치하며 PATH에 등록됨 |
+| 등록 명령 | `unity mcp configure claude-code` (`scripts/setup_mcp.sh`가 자동 호출) |
+| 스킬 | `unity skill install claude-code` — Unity CLI 사용법 스킬을 `~/.claude/skills/unity-cli/`에 설치 |
+| 상태 | 2026-08-25에 WSL 환경에서 Editor까지 실측 검증했으나, 2026-09-02 Windows 단일 환경 전환([ADR 0008](../../docs/decisions/0008-windows-only-development-environment.md)) 이후로는 **재검증 필요** |
 
 > 폐기된 이전 방식: 기존에는 Unity 6000.0+ 내장 `com.unity.ai.assistant` 패키지의 in-Editor MCP Bridge + `relay_win.exe`를 사용했으나(서버 이름 `unity-mcp`), Unity가 in-Editor MCP server를 폐기하고 Unity CLI로 대체한다고 공식 발표(2026-08)함에 따라 프로젝트 시작 전인 이 시점에 미리 CLI 방식으로 전환했습니다. `unity-mcp`/relay 등록은 제거됨.
->
-> Unity 공식 `unity mcp configure claude-code` 명령은 `claude mcp add --scope user --transport stdio unity-editor-mcp unity mcp`를 실행하려 시도하지만, 이는 Claude Code와 Unity CLI가 같은 OS에서 도는 걸 전제로 `unity`가 PATH에 있다고 가정합니다. WSL 환경에서는 `unity`가 PATH에 없으므로(Windows 바이너리) 위처럼 WSL에서 보이는 전체 경로로 직접 등록해야 합니다.
 
-> **자동화**: 아래 1~5단계 중 WSL 쪽 준비(Git LFS, Windows Git Credential Manager 연동, Unity MCP 등록)는 `scripts/setup_unity_workspace.sh`로 자동화되어 있습니다 (여러 번 실행해도 안전).
+> **자동화**: Unity MCP 등록과 스킬 설치는 `scripts/setup_mcp.sh`가 처리합니다 (여러 번 실행해도 안전). Windows에서는 `unity`가 PATH에 있어 공식 명령이 그대로 동작하므로, 예전처럼 바이너리 전체 경로를 직접 조립할 필요가 없습니다.
 
 **연결 범위 — 계정이 아니라 "그 순간 열려 있는 Unity 프로젝트" 기준입니다**
 
@@ -114,21 +113,11 @@
 1. 프로토타입 레포 클론
 2. **[사람이 직접]** Unity Editor(6000.0+, 이번 전환의 최소 요구 버전)로 그 프로젝트를 최소 1회 실행
 3. **[사람이 직접 또는 스크립트]** 해당 프로젝트에 Unity Pipeline 패키지 설치: `unity pipeline install --project-path <프로젝트 경로>` (기존 `com.unity.ai.assistant` 패키지 대신 이 패키지가 CLI와 Editor를 연결하는 역할을 함)
-4. WSL 환경이면 GameDev-Platform 레포에서 `./scripts/setup_unity_workspace.sh` 실행 → Mirrored Networking 점검 + Unity CLI 자동 탐색/등록까지 처리 (Claude Code에게 이 스크립트 실행을 요청하면 됨)
+4. GameDev-Platform 레포에서 `./scripts/setup_mcp.sh` 실행 → `unity mcp configure claude-code` + `unity skill install claude-code` 자동 수행
 5. Claude Code 세션 재시작 → `unity status`로 Editor가 목록에 뜨는지 확인
 6. 만약 4번 직후 `unity status`가 비어있다면, **Unity Editor 창을 한 번 클릭해서 포커스를 주세요.** Unity는 외부 프로세스(CLI)가 `manifest.json`을 바꿔도 창이 포커스를 받아야 그 변경을 재스캔합니다 — 포커스를 주고 나면 Pipeline 패키지 리졸브/컴파일이 끝난 뒤 자동으로 연결됩니다. "Pending Connections 수동 Accept" 같은 별도 승인 단계는 필요 없었습니다.
 
-> **실측 검증 완료 (2026-08-25)**: 실제 Unity 6000.3.22f1 프로젝트(`rlawkd`)에 위 1~6단계를 그대로 적용해 `unity status`에서 `State: ready`, `unity pipeline list`에서 `Server Reachable: true`까지 확인했습니다. `unity command`로 GameObject 생성/컴포넌트 부착/빌드/Console 조회 등 도구가 실제로 노출되는 것도 확인함.
-
-**WSL ↔ Windows 네트워크 이슈**: 실측 결과 **문제 없었습니다.** Unity CLI 바이너리 자체가 Windows 프로세스로 실행되고(WSL은 그 프로세스를 띄우기만 함), CLI ↔ Editor 구간은 순수 Windows 내부 통신이라 WSL의 `localhost`/Windows의 `localhost`가 다르게 취급되는 문제 자체가 발생하지 않았습니다. 별도의 Mirrored Networking 설정 없이 바로 `Server Reachable: true`가 나왔습니다.
-
-> 참고(구 relay 방식 한정): 예전 `com.unity.ai.assistant` 패키지 기반 in-Editor Bridge를 쓸 때는 이 문제가 실제로 있었고, 아래처럼 WSL Mirrored Networking을 켜서 해결했습니다. Unity CLI로 완전히 전환한 지금은 필요하지 않지만, 혹시 옛 문서나 다른 프로젝트에서 relay 방식을 참고할 경우를 위해 남겨둡니다.
->
-> - Windows 사용자 홈의 `.wslconfig`에 아래 내용을 추가한 뒤 PowerShell에서 `wsl --shutdown` 실행
->   ```ini
->   [wsl2]
->   networkingMode=mirrored
->   ```
+> **실측 이력 (2026-08-25, WSL 환경)**: 당시 Unity 6000.3.22f1 프로젝트(`rlawkd`)에 위 절차를 적용해 `unity status`에서 `State: ready`, `unity pipeline list`에서 `Server Reachable: true`까지 확인했고, `unity command`로 GameObject 생성/컴포넌트 부착/빌드/Console 조회 도구가 노출되는 것도 확인했습니다. 다만 그때는 WSL의 Claude Code가 Windows 바이너리를 전체 경로로 호출하는 구성이었습니다. Windows 단일 환경으로 전환한 뒤에는 이 저장소의 `game/` 프로젝트로 다시 확인해야 합니다.
 
 ---
 

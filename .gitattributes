@@ -5,7 +5,7 @@
 #   1) Unity Scene/Prefab 등 YAML 자산을 UnityYAMLMerge(Smart Merge)로 병합
 #   2) 바이너리 자산을 Git LFS로 관리해 저장소 비대화 방지
 #   3) 병합 불가능한 바이너리는 lockable로 지정해 동시 편집 사고 예방
-#   4) Windows / WSL / macOS가 섞인 팀에서 줄바꿈 차이로 인한 가짜 변경 제거
+#   4) 줄바꿈 차이로 인한 가짜 변경 제거
 #
 # 사용법과 배경: integrations/unity/workflow.md 의 "Version Control 규칙" 참고
 # ============================================================
@@ -15,7 +15,7 @@
 # ------------------------------------------------------------
 * text=auto
 
-# WSL에서 실행되는 스크립트는 반드시 LF (CRLF면 실행 자체가 실패합니다)
+# Git Bash에서 실행되는 스크립트는 반드시 LF (CRLF면 실행 자체가 실패합니다)
 *.sh   text eol=lf
 *.bash text eol=lf
 

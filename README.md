@@ -88,9 +88,8 @@ GameDev-Platform
 
 # 기술 스택
 
-- Windows 11
-- WSL2 (Ubuntu 24.04)
-- Git / Git LFS
+- Windows 10 (1809+) / Windows 11
+- Git for Windows (Git Bash, Git LFS 포함)
 - GitHub
 - VS Code
 - Claude Code

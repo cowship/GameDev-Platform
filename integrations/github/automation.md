@@ -63,7 +63,7 @@ ROI(설정 비용 대비 잡아내는 문제) 순으로 도입합니다. 새로�
   - `pull_request` (paths 필터)
   - `push: branches: [main]` (동일 paths 필터)
   - `workflow_dispatch:`
-  - 단, paths 범위는 워크플로별로 재판단합니다. 예를 들어 저장소 전역 `**/*.md`를 대상으로 하는 `docs-lint.yml`은 `check-environment-dry-run.yml`처럼 좁은 paths 필터를 그대로 복붙하면 안 됩니다.
+  - 단, paths 범위는 워크플로별로 재판단합니다. 예를 들어 저장소 전역 `**/*.md`를 대상으로 하는 `docs-lint.yml`은 `shellcheck.yml`처럼 좁은 paths 필터를 그대로 복붙하면 안 됩니다.
 - 워크플로 파일 상단에 한국어 설명 주석(무엇을 / 왜 / 제외 범위)을 유지합니다. 비개발자 사용자도 워크플로 파일을 열었을 때 목적을 바로 이해할 수 있게 하는 것이 이 저장소의 기존 관례입니다.
 - Job 이름은 워크플로 목적을 그대로 반영하는 짧은 slug를 사용합니다 (`dry-run:`, `agent-drift:`, `shellcheck:`).
 
@@ -73,7 +73,6 @@ ROI(설정 비용 대비 잡아내는 문제) 순으로 도입합니다. 새로�
 
 | 워크플로 | 검증 대상 | 상태 |
 |---|---|---|
-| [check-environment-dry-run.yml](../../.github/workflows/check-environment-dry-run.yml) | `scripts/check_environment.sh`, `scripts/setup.sh`의 실제 실행 결과(행위) | 기존 |
 | [agent-drift-check.yml](../../.github/workflows/agent-drift-check.yml) | Agent 3계층(`agents/`, `.claude/agents/`, `.claude/commands/`) 드리프트 | 완료 (1단계) |
 | [shellcheck.yml](../../.github/workflows/shellcheck.yml) | `scripts/*.sh` 정적 분석 | 완료 (2단계) |
 

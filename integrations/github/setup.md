@@ -15,9 +15,7 @@ GitHub 사용 전 다음 환경이 준비되어 있어야 합니다.
 
 # SSH Key 생성
 
-`./scripts/check_environment.sh`를 실행하면 SSH Key가 없을 때 생성 여부를 물어보고, y 입력 시 자동으로 생성한 뒤 Public Key를 화면에 출력합니다 (GitHub 웹사이트 등록은 자동화할 수 없어 수동으로 진행해야 합니다).
-
-수동으로 생성하려면 기존 키가 없는 경우 다음을 실행합니다.
+Git Bash에서 다음을 실행합니다. 팀원별 상세 절차는 [docs/team/ONBOARDING.md](../../docs/team/ONBOARDING.md)를 참고하세요.
 
 ```bash
 ssh-keygen -t ed25519 -C "your_email@example.com"
@@ -29,7 +27,7 @@ ssh-keygen -t ed25519 -C "your_email@example.com"
 cat ~/.ssh/id_ed25519.pub
 ```
 
-`check_environment.sh` 스크립트가 `~/.ssh/id_ed25519.pub` 존재 여부를 자동으로 확인합니다.
+Git Bash에서는 `clip < ~/.ssh/id_ed25519.pub`로 공개키를 바로 클립보드에 복사할 수 있습니다.
 
 ---
 
@@ -84,9 +82,7 @@ GitHub MCP Server(`@modelcontextprotocol/server-github`) 등록 시 `scripts/set
 
 # GitHub CLI 설치 (선택)
 
-```bash
-sudo apt install gh
-```
+[GitHub CLI 릴리스 페이지](https://github.com/cli/cli/releases)에서 Windows 설치 파일을 받거나, `winget install --id GitHub.cli`로 설치합니다.
 
 로그인
 

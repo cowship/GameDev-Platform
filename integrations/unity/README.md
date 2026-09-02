@@ -73,7 +73,7 @@ unity/
 향후 다음 항목을 추가할 예정입니다.
 
 - ~~Unity 프로젝트 템플릿(Starter Kit) 정의 (`project_template.md`)~~ 완료 ([ADR 0004](../../docs/decisions/0004-unity-starter-template.md), Stage 4 게이트 충족)
-- ~~Unity MCP 연동 검토~~ 완료 (Unity CLI MCP Mode, `scripts/setup_unity_workspace.sh`)
+- ~~Unity MCP 연동 검토~~ 완료 (Unity CLI MCP Mode, `scripts/setup_mcp.sh`)
 - CI 기반 Unity Build 자동화
 - `Scripts/Networking/` 카테고리를 `project_template.md`의 표준 구조에 정식 편입할지 결정 ([ADR 0007](../../docs/decisions/0007-photon-fusion-multiplayer-stack.md) 후속 작업)
 - 복사 가능한 폴더 스켈레톤 + `manifest.json` 프리셋 추출 (두 번째 게임 프로젝트가 생기는 시점에 `game/`의 실제 구성에서 역으로 뽑아냄)

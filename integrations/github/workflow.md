@@ -82,6 +82,16 @@ docs: Add GitHub integration setup guide
 
 ---
 
+# Branch Protection
+
+이 저장소는 **GitHub Free Private**이라 Branch Protection(Ruleset)을 사용할 수 없습니다. Private 저장소에서 규칙을 강제하려면 Team 이상의 유료 플랜이 필요합니다.
+
+따라서 "`main` 직접 push 금지 / PR 필수"는 **팀의 합의로만 유지됩니다.** 사고를 줄이기 위한 실천 방법은 [docs/team/README.md](../../docs/team/README.md)의 main 항목을 참고하세요.
+
+플랜을 올리거나 저장소를 Public으로 전환하면 그때 Ruleset을 적용합니다. Public 전환 시에는 Photon App Id를 커밋에서 제외해야 합니다([integrations/photon/setup.md](../photon/setup.md#23-app-id를-커밋할-것인가)).
+
+---
+
 # Review 규칙
 
 - 최소 1명 이상의 Review를 권장합니다.

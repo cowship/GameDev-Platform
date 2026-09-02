@@ -55,6 +55,22 @@ main                        ← 게임 개발 본류. 항상 열리고 실행되
 
 main이 깨지면 5명 전원이 동시에 멈춥니다. "내 로컬에서는 되는데"를 막는 것이 PR과 리뷰의 목적입니다.
 
+> ⚠️ **이 규칙은 기술적으로 강제되지 않습니다.** 이 저장소는 GitHub Free Private이라 Branch Protection(Ruleset)을 걸 수 없습니다. 즉 마음만 먹으면 `main`에 직접 push할 수 있고, GitHub이 막아주지 않습니다.
+>
+> **팀의 합의로만 유지되는 규칙**이므로, 실수로 `main`에 직접 커밋하지 않도록 각자 아래를 습관화합니다.
+>
+> ```bash
+> git branch --show-current   # 커밋 전에 현재 브랜치 확인
+> ```
+>
+> 실수로 main에 커밋했다면 push하기 전에 되돌릴 수 있습니다.
+>
+> ```bash
+> git switch -c feature/작업이름   # 커밋을 새 브랜치로 옮기고
+> git switch main
+> git reset --hard origin/main    # main은 원격 상태로 되돌림
+> ```
+
 ## 2.2 feature / fix / chore
 
 실제 게임 개발은 전부 이 브랜치에서 이루어집니다.
@@ -200,7 +216,11 @@ git checkout --theirs game/Assets/Scenes/Main.unity   # 상대 버전 채택
 | UI | `game/Assets/Scripts/UI/` | (미정) |
 | 아트 | `game/Assets/Art/` | (미정) |
 | 사운드 | `game/Assets/Audio/` | (미정) |
-| 플랫폼/인프라 | `scripts/`, `.github/`, `docs/` | (미정) |
+| 플랫폼/인프라 | `scripts/`, `.github/`, `docs/`, `game/ProjectSettings/` | @ajunlee0 |
+
+**팀원 계정**: `@cowship` `@ajunlee0` `@turing081226` `@sjy084` (+ 미확인 1명 — [.github/CODEOWNERS](../../.github/CODEOWNERS)의 "확인 필요" 참고)
+
+담당이 정해지면 위 표와 [.github/CODEOWNERS](../../.github/CODEOWNERS)를 함께 갱신합니다.
 
 담당은 "그 영역을 혼자 만든다"가 아니라 **"그 영역 변경 PR을 반드시 한 번 본다"**는 뜻입니다.
 

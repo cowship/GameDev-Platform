@@ -1,7 +1,10 @@
 #!/bin/bash
 #
 # GameDev-Platform에서 사용하는 MCP Server를 자동으로 등록합니다.
+# Claude Code를 쓰는 팀원만 실행하면 됩니다 (게임 개발 자체에는 필수가 아닙니다).
 # 여러 번 실행해도 안전합니다 (이미 등록된 서버는 건너뜁니다).
+#
+# 실행 환경: Windows + Git Bash
 # 상세 배경은 integrations/mcp/servers.md, integrations/mcp/setup.md를 참고하세요.
 
 echo "========================================"
@@ -19,7 +22,7 @@ fi
 
 if ! command -v npx >/dev/null 2>&1; then
     echo "❌ Node.js(npx)를 찾을 수 없습니다."
-    echo "   ./scripts/check_environment.sh 로 설치 여부를 확인하세요."
+    echo "   https://nodejs.org 에서 Node.js를 설치하면 npx도 함께 설치됩니다."
     exit 1
 fi
 
@@ -96,12 +99,36 @@ else
 fi
 echo
 
-echo "4) Unity MCP (수동 단계 — Unity CLI + 프로젝트 필요)"
+echo "4) Unity MCP (Unity CLI 기반)"
 echo "----------------------------------------"
-echo "ℹ️  Unity 프로젝트를 만들고 Editor를 한 번 실행한 뒤(Unity Hub가 Unity CLI를 자동 설치합니다) 아래를 실행하세요:"
-echo "   ./scripts/setup_unity_workspace.sh"
-echo "   (WSL Mirrored Networking 확인, Git LFS 설치, Windows Git Credential Manager 연동,"
-echo "    Unity CLI 기반 MCP(unity-editor-mcp) 자동 등록까지 한 번에 처리합니다. 여러 번 실행해도 안전합니다.)"
+if is_registered unity-editor-mcp; then
+    printf "✅ %-20s 이미 등록됨 (건너뜀)\n" "unity-editor-mcp"
+elif ! command -v unity >/dev/null 2>&1; then
+    echo "ℹ️  Unity CLI(unity)를 PATH에서 찾지 못했습니다."
+    printf '   Unity Hub를 한 번 실행하면 CLI가 자동 설치됩니다 (%%LOCALAPPDATA%%\\Unity\\bin\\unity.exe).\n'
+    echo "   설치 후 이 스크립트를 다시 실행하거나 직접 실행하세요: unity mcp configure claude-code"
+else
+    printf "▶ %-20s 등록 중...\n" "unity-editor-mcp"
+    if unity mcp configure claude-code >/dev/null 2>&1; then
+        printf "✅ %-20s 등록 완료\n" "unity-editor-mcp"
+        MCP_LIST="$(claude mcp list 2>/dev/null)"
+    else
+        printf "❌ %-20s 등록 실패 — 'unity mcp configure claude-code' 를 직접 실행해 에러를 확인하세요.\n" "unity-editor-mcp"
+    fi
+fi
+
+# Unity CLI 스킬(Claude Code용)도 함께 설치합니다.
+if command -v unity >/dev/null 2>&1; then
+    if [ -d "$HOME/.claude/skills/unity-cli" ]; then
+        printf "✅ %-20s 이미 설치됨 (건너뜀)\n" "unity-cli skill"
+    elif unity skill install claude-code >/dev/null 2>&1; then
+        printf "✅ %-20s 설치 완료\n" "unity-cli skill"
+    else
+        printf "ℹ️  %-20s 설치 실패 (선택 사항이라 계속 진행합니다)\n" "unity-cli skill"
+    fi
+fi
+
+echo "ℹ️  Unity MCP 도구는 Unity Editor가 실행 중일 때만 응답합니다. 'unity status'로 확인하세요."
 echo
 
 echo "========================================"

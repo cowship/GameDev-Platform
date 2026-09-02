@@ -60,7 +60,7 @@ GameDev-Platform
 ├── docs/             # ADR, Architecture, Setup, Workflow, Troubleshooting
 ├── integrations/     # GitHub / MCP / Notion / Unity / Claude Code 연동 표준
 ├── prompts/          # 재사용 가능한 Prompt (Planned)
-├── scripts/          # 환경 설정/점검 자동화 (setup.sh, check_environment.sh)
+├── scripts/          # 팀원 온보딩/MCP 설정 자동화 (setup_team_member.sh, setup_mcp.sh)
 ├── templates/        # 재사용 가능한 프로젝트 템플릿 (Planned)
 │
 ├── .claude/
@@ -84,7 +84,7 @@ GameDev-Platform
 |---|---|
 | Documentation First | 모든 구조 변경 전 ADR 작성 (0001~0003) |
 | Reusability First | Agent 정의는 특정 게임이 아닌 플랫폼 전역에 재사용 |
-| Automation First | `scripts/setup.sh`, Slash Command Dispatcher |
+| Automation First | `scripts/setup_team_member.sh`, `scripts/setup_mcp.sh`, Slash Command Dispatcher |
 | Simplicity | Command는 로직 없는 Dispatcher, MCP는 Least Privilege로 제한 |
 
 ---

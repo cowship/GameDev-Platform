@@ -6,36 +6,21 @@
 
 Claude Code 사용 전 다음 환경이 준비되어 있어야 합니다.
 
-- Windows 11
-- WSL2
-- Ubuntu 24.04 LTS
-- Git
-- Node.js (nvm 권장)
+- Windows 10 (1809+) 또는 Windows 11
+- [Git for Windows](https://git-scm.com/download/win) — Git Bash 제공 (Claude Code의 Bash 도구가 이를 사용)
+- Node.js
 - VS Code
 - GitHub SSH 인증
+
+> 이 프로젝트는 Windows 단일 환경으로 운영합니다. WSL은 사용하지 않습니다 ([ADR 0008](../../docs/decisions/0008-windows-only-development-environment.md)).
 
 ---
 
 # Installation
 
-`./scripts/check_environment.sh`를 실행하면 Claude Code CLI가 없을 때 아래 명령을 자동으로 실행할지 물어봅니다 (y 입력 시 바로 설치).
+Windows 설치 방법은 [공식 문서](https://code.claude.com/docs/en/setup)를 따릅니다.
 
-수동으로 설치하려면 다음을 실행합니다.
-
-```bash
-curl -fsSL https://claude.ai/install.sh | bash
-```
-
----
-
-# PATH 설정
-
-설치 후 `claude` 명령어가 인식되지 않는 경우 다음 명령어를 실행합니다.
-
-```bash
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
-source ~/.bashrc
-```
+Git for Windows가 설치되어 있으면 Claude Code가 Git Bash를 Bash 도구로 사용합니다. 없으면 PowerShell로 대체되며, 이 저장소의 `scripts/*.sh`를 실행할 수 없으므로 Git for Windows 설치를 권장합니다.
 
 ---
 
@@ -79,7 +64,8 @@ Claude는 프로젝트를 분석하며 다음 파일을 우선적으로 참고�
 
 # Recommended Environment
 
-- VS Code + WSL
+- VS Code
+- Git for Windows (Git Bash)
 - GitHub Repository
 - Claude Code
 - Unity Hub
@@ -107,32 +93,20 @@ GameDev-Platform이 채택한 외부(커뮤니티) Claude Code Skill입니다.
 
 # Troubleshooting
 
-## PATH 오류
+## `claude: command not found`
 
-```text
-claude: command not found
-```
-
-→ PATH를 설정한 후 새로운 터미널을 실행합니다.
+설치 후 새 터미널을 열어야 PATH가 반영됩니다. 그래도 안 되면 [공식 설치 문제 해결 문서](https://code.claude.com/docs/en/troubleshoot-install)를 참고합니다.
 
 ---
 
-## apt Update 오류
+## `scripts/*.sh`가 실행되지 않음
 
-WSL 설치 과정에서 `/etc/apt/sources.list`에 잘못된 저장소가 추가될 수 있습니다.
-
-해결 방법
-
-```bash
-sudo cp /etc/apt/sources.list /etc/apt/sources.list.backup
-sudo truncate -s 0 /etc/apt/sources.list
-sudo apt update
-```
+Git for Windows가 설치되지 않아 Claude Code가 PowerShell을 쓰고 있을 가능성이 큽니다. Git for Windows를 설치하면 Bash 도구가 활성화됩니다.
 
 ---
 
 # References
 
-- Claude Code 공식 문서
-- Ubuntu WSL Documentation
-- Node Version Manager (nvm)
+- [Claude Code 공식 문서](https://code.claude.com/docs/en/overview)
+- [Advanced setup](https://code.claude.com/docs/en/setup) — Windows 요구사항 (Git for Windows / PowerShell)
+- [Git for Windows](https://git-scm.com/download/win)

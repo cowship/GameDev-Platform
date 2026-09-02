@@ -96,11 +96,11 @@ GameDev-Platform
 | Stage 1 | Development Environment | `integrations/*/setup.md`, `scripts/` |
 | Stage 2 | AI Environment | `agents/*.md`, `.claude/agents`, `.claude/commands`, MCP 4종 연동 (ADR 0001~0003) |
 | Stage 3 | Documentation Platform | `docs/architecture/`(본 문서), `docs/decisions/`, Notion 연동 |
-| Stage 4 | Unity Starter Template | `integrations/unity/`(스펙 확정, ADR 0004). 실물 스켈레톤(`templates/unity-starter/`)은 Stage 6 First Game Project 착수 시 트리거되며, 지금 당장 생성하지 않음 |
-| Stage 5 | Team Collaboration | `integrations/github/workflow.md` — Stage 6 게임 프로젝트 Repository용 협업 표준 (작성 완료). Platform 자체는 ADR(`docs/decisions/`) + main 직접 커밋으로 운영 |
-| Stage 6 | First Game Project | 별도 Repository, 본 플랫폼의 표준을 소비 |
+| Stage 4 | Unity Starter Template | `integrations/unity/`(스펙 확정, ADR 0004). 스펙은 `game/` 프로젝트 생성으로 처음 실물 적용됨(ADR 0007) |
+| Stage 5 | Team Collaboration | `integrations/github/workflow.md`(Branch/PR 표준), `docs/team/`(팀 운영 절차), `.github/`(Issue·PR 템플릿, CODEOWNERS), `scripts/setup_team_member.sh`. 5인 팀 PR 기반 협업으로 전환 (ADR 0006) |
+| Stage 6 | First Game Project | `game/` — Unity 6000.3.22f1 + URP(2D) + Photon Fusion 2. `integrations/photon/`이 네트워킹 표준 (ADR 0007) |
 
-현재(2026-08-02 기준) Stage 1~3은 완료되었고, Stage 4(Unity Starter Template)는 게이트([ADR 0004](../decisions/0004-unity-starter-template.md), [`integrations/unity/project_template.md`](../../integrations/unity/project_template.md)) 충족으로 진입했으며, Stage 5(Team Collaboration)는 요구사항 검토가 완료되었습니다(`integrations/github/workflow.md`는 Stage 6 게임 프로젝트 Repository용 표준으로 범위 확정). 본 문서 세트는 Stage 3의 산출물입니다.
+현재(2026-09-02 기준) Stage 1~4는 완료되었고, **Stage 5(Team Collaboration)와 Stage 6(First Game Project)이 동시에 진행 중**입니다. 팀원 5명이 이미 이 저장소를 clone한 상태에서 Unity + Photon Fusion 게임 개발을 시작하게 되어, 별도 게임 Repository를 만드는 대신 이 저장소의 `game/`에서 개발하고 운영 모델을 PR 기반으로 전환했습니다([ADR 0006](../decisions/0006-game-development-in-platform-repository.md), [ADR 0007](../decisions/0007-photon-fusion-multiplayer-stack.md)). 본 문서 세트는 Stage 3의 산출물입니다.
 
 ---
 

@@ -73,6 +73,7 @@ export NVM_DIR="$HOME/.nvm"
 # nvm.sh 내부 코드가 set -u(nounset)와 호환되지 않아(예: unbound variable로 스크립트 전체가
 # 조기 종료됨) nvm을 다루는 동안만 nounset을 잠시 끈다.
 set +u
+# shellcheck disable=SC1091  # nvm.sh는 설치 후 런타임에만 존재합니다.
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" >/dev/null 2>&1
 
 if command -v node >/dev/null 2>&1 && command -v npm >/dev/null 2>&1; then
@@ -84,6 +85,7 @@ else
         if [ ! -s "$NVM_DIR/nvm.sh" ]; then
             echo "▶ nvm 설치 중..."
             curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+            # shellcheck disable=SC1091  # nvm.sh는 설치 후 런타임에만 존재합니다.
             \. "$NVM_DIR/nvm.sh"
         fi
         nvm install --lts
@@ -115,6 +117,7 @@ else
     if confirm "지금 설치할까요? (curl -fsSL https://claude.ai/install.sh | bash)"; then
         curl -fsSL https://claude.ai/install.sh | bash
         export PATH="$HOME/.local/bin:$PATH"
+        # shellcheck disable=SC2016  # .bashrc에는 확장되지 않은 리터럴 $HOME/$PATH가 들어가야 합니다.
         grep -q '.local/bin' "$HOME/.bashrc" 2>/dev/null || echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
         if command -v claude >/dev/null 2>&1; then
             printf "✅ Claude Code    %s\n" "$(claude --version 2>/dev/null | head -n 1)"

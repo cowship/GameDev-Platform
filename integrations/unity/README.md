@@ -6,9 +6,16 @@
 
 # Overview
 
-GameDev-Platform 자체는 게임을 개발하지 않으며, 실제 게임 프로젝트는 별도 Repository에서 개발합니다.
+이 저장소의 Unity 프로젝트는 **`game/`** 폴더에 있습니다 ([ADR 0006](../../docs/decisions/0006-game-development-in-platform-repository.md)). Unity Hub에서는 저장소 루트가 아니라 이 폴더를 엽니다.
 
-Unity Integration은 그 별도 Repository들이 공통으로 따라야 할 **Unity 환경, 프로젝트 구조, Git 연동 표준**을 관리합니다.
+| 항목 | 값 |
+|---|---|
+| 프로젝트 경로 | `game/` |
+| Editor 버전 | `6000.3.22f1` |
+| Render Pipeline | URP (2D) |
+| 네트워킹 | Photon Fusion 2 → [integrations/photon/](../photon/README.md) |
+
+Unity Integration은 이 프로젝트(및 앞으로 만들 프로젝트)가 공통으로 따르는 **Unity 환경, 프로젝트 구조, Git 연동 표준**을 관리합니다.
 
 > Unity 코드 작성 원칙(네이밍, Architecture 등)은 [`agents/unity.md`](../../agents/unity.md)에서 다루며, 본 문서는 도구/환경 설정에 집중합니다.
 
@@ -55,6 +62,9 @@ unity/
 |----------|-------------|
 | [agents/unity.md](../../agents/unity.md) | Unity Agent 코딩 원칙 및 Architecture 가이드 |
 | [docs/decisions/0004-unity-starter-template.md](../../docs/decisions/0004-unity-starter-template.md) | Unity Starter Template 구조 결정 근거(ADR) |
+| [docs/decisions/0007-photon-fusion-multiplayer-stack.md](../../docs/decisions/0007-photon-fusion-multiplayer-stack.md) | 현재 `game/` 프로젝트의 Editor 버전·패키지·폴더 구성 결정 근거(ADR) |
+| [docs/team/README.md](../../docs/team/README.md) | Unity 공동 작업 규칙 (Scene 소유권, LFS Locking, `.meta` 규칙) |
+| [integrations/photon/README.md](../photon/README.md) | Photon Fusion 2 연동 표준 |
 
 ---
 
@@ -63,9 +73,10 @@ unity/
 향후 다음 항목을 추가할 예정입니다.
 
 - ~~Unity 프로젝트 템플릿(Starter Kit) 정의 (`project_template.md`)~~ 완료 ([ADR 0004](../../docs/decisions/0004-unity-starter-template.md), Stage 4 게이트 충족)
-- Unity MCP 연동 검토
+- ~~Unity MCP 연동 검토~~ 완료 (Unity CLI MCP Mode, `scripts/setup_unity_workspace.sh`)
 - CI 기반 Unity Build 자동화
-- `templates/unity-starter/`에 실제 복사 가능한 폴더 스켈레톤 + `manifest.json` 프리셋 추가 (Stage 6 첫 게임 적용 후 반복 수작업이 확인되면 검토)
+- `Scripts/Networking/` 카테고리를 `project_template.md`의 표준 구조에 정식 편입할지 결정 ([ADR 0007](../../docs/decisions/0007-photon-fusion-multiplayer-stack.md) 후속 작업)
+- 복사 가능한 폴더 스켈레톤 + `manifest.json` 프리셋 추출 (두 번째 게임 프로젝트가 생기는 시점에 `game/`의 실제 구성에서 역으로 뽑아냄)
 
 ---
 

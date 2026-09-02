@@ -23,7 +23,7 @@ GameDev-Platform은 Unity 게임 개발을 위한 AI Native 개발 플랫폼입�
 - Unity 프로젝트 템플릿
 - 자동화 스크립트
 
-실제 게임 프로젝트는 별도의 Repository에서 개발합니다.
+실제 게임 프로젝트는 이 저장소의 `game/` 폴더에서 개발합니다 ([ADR 0006](docs/decisions/0006-game-development-in-platform-repository.md)).
 
 ---
 
@@ -63,17 +63,26 @@ AI를 보조 도구가 아닌 팀원으로 활용한다.
 ```text
 GameDev-Platform
 │
-├── agents
-├── docs
-├── integrations
+├── game                ← Unity 프로젝트 (Unity Hub로 이 폴더를 엽니다)
+│   ├── Assets
+│   ├── Packages
+│   └── ProjectSettings
+│
+├── agents              ← AI Agent 역할 정의
+├── docs                ← 아키텍처, 의사결정(ADR), 팀 운영 문서
+├── integrations        ← Unity / GitHub / Photon / Notion / MCP 연동 표준
 ├── prompts
-├── scripts
+├── scripts             ← 환경 구축 자동화 스크립트
 ├── templates
 │
+├── .github             ← Issue / PR 템플릿, CODEOWNERS, CI 워크플로
 ├── README.md
 ├── CLAUDE.md
+├── .gitattributes      ← Git LFS, Unity Smart Merge 설정
 └── .gitignore
 ```
+
+> ⚠️ Unity Hub에서는 **저장소 루트가 아니라 `game/` 폴더**를 열어야 합니다.
 
 ---
 
@@ -81,12 +90,13 @@ GameDev-Platform
 
 - Windows 11
 - WSL2 (Ubuntu 24.04)
-- Git
+- Git / Git LFS
 - GitHub
 - VS Code
 - Claude Code
 - Node.js
-- Unity
+- Unity 6000.3.22f1 (URP, 2D)
+- Photon Fusion 2 (멀티플레이 네트워킹)
 - Notion
 - MCP
 
@@ -112,19 +122,32 @@ Unity Starter Template
 
 ## Stage 5
 
-Team Collaboration
+Team Collaboration — 진행 중 (5인 팀, PR 기반 협업)
 
 ## Stage 6
 
-First Game Project
+First Game Project — 진행 중 (Unity + Photon Fusion 멀티플레이)
 
 ---
 
 # Repository Policy
 
-GameDev-Platform는 플랫폼 저장소입니다.
+GameDev-Platform는 **플랫폼 표준과 실제 게임 프로젝트를 함께 담는 저장소**입니다.
 
-실제 게임 프로젝트는 별도의 Repository에서 관리합니다.
+- 플랫폼 자산(문서, Agent 정의, 스크립트, 연동 표준)은 저장소 루트에서 관리합니다.
+- 실제 게임 프로젝트는 `game/` 폴더에서 관리합니다.
+
+두 영역은 디렉토리로 분리되어 있어, 필요해지면 `game/`을 별도 Repository로 떼어낼 수 있습니다. 이 정책의 배경과 대안 검토는 [ADR 0006](docs/decisions/0006-game-development-in-platform-repository.md)을 참고하세요.
+
+---
+
+# 팀 개발을 시작하려면
+
+```bash
+./scripts/setup_team_member.sh
+```
+
+자세한 절차는 [docs/team/ONBOARDING.md](docs/team/ONBOARDING.md), 협업 규칙은 [docs/team/README.md](docs/team/README.md)를 참고합니다.
 
 ---
 

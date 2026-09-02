@@ -14,6 +14,16 @@
 
 # Quick Start
 
+## 팀원(Unity 게임 개발)으로 참여한다면
+
+```bash
+./scripts/setup_team_member.sh
+```
+
+Git LFS, Unity Scene 병합 도구, 개인 sandbox 브랜치를 한 번에 설정합니다. 전체 절차는 [docs/team/ONBOARDING.md](../team/ONBOARDING.md)를 참고하세요.
+
+## Claude Code / MCP 환경까지 구축한다면
+
 ```bash
 ./scripts/setup.sh
 ```
@@ -37,7 +47,8 @@
 | 2 | GitHub | [integrations/github/setup.md](../../integrations/github/setup.md) |
 | 3 | Notion | [integrations/notion/workspace.md](../../integrations/notion/workspace.md) *(설치 절차 없음, Workspace 구조 문서로 대체)* |
 | 4 | Unity | [integrations/unity/setup.md](../../integrations/unity/setup.md) |
-| 5 | MCP | [integrations/mcp/setup.md](../../integrations/mcp/setup.md) |
+| 5 | Photon Fusion | [integrations/photon/setup.md](../../integrations/photon/setup.md) |
+| 6 | MCP | [integrations/mcp/setup.md](../../integrations/mcp/setup.md) |
 
 ---
 
@@ -82,6 +93,9 @@ Git, Git 사용자 정보, Node.js/npm, Claude Code, GitHub CLI, VS Code, GitHub
 | Document | Description |
 |---|---|
 | [scripts/setup.sh](../../scripts/setup.sh) | 전체 설정 진입점 |
+| [scripts/setup_team_member.sh](../../scripts/setup_team_member.sh) | 팀원 온보딩 (Git LFS, UnityYAMLMerge, sandbox 브랜치) |
+| [scripts/setup_unity_workspace.sh](../../scripts/setup_unity_workspace.sh) | WSL2 + Windows Unity 조합용 추가 설정, Unity MCP 등록 |
+| [docs/team/ONBOARDING.md](../team/ONBOARDING.md) | 팀원 최초 환경 구축 절차 (Unity, Photon 포함) |
 | [scripts/check_environment.sh](../../scripts/check_environment.sh) | 환경 점검 스크립트 |
 | [scripts/setup_mcp.sh](../../scripts/setup_mcp.sh) | MCP Server 자동 등록 스크립트 (반복 실행 안전) |
 | [.github/workflows/check-environment-dry-run.yml](../../.github/workflows/check-environment-dry-run.yml) | 깨끗한 Docker 컨테이너에서 `check_environment.sh`의 자동 설치 분기(Git/Node.js/Claude CLI/gh/SSH Key)를 검증하는 CI (WSL 전용 분기 제외) |

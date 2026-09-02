@@ -29,3 +29,46 @@ __pycache__/
 
 # OS
 *.swp
+# ============================================================
+# Unity 게임 프로젝트 (game/)
+# ============================================================
+# Unity가 자동 생성하며 사람마다 내용이 달라지는 디렉토리입니다.
+# 커밋하면 매번 충돌이 나고 저장소가 급격히 무거워집니다.
+/game/[Ll]ibrary/
+/game/[Tt]emp/
+/game/[Oo]bj/
+/game/[Bb]uild/
+/game/[Bb]uilds/
+/game/[Ll]ogs/
+/game/[Uu]ser[Ss]ettings/
+/game/[Mm]emoryCaptures/
+/game/[Rr]ecordings/
+/game/[Aa]ssets/AssetStoreTools*
+/game/[Aa]ssets/[Ss]treamingAssets/aa/
+
+# Unity가 IDE용으로 매번 다시 생성하는 파일
+/game/*.csproj
+/game/*.unityproj
+/game/*.sln
+/game/*.suo
+/game/*.user
+/game/*.userprefs
+/game/*.pidb
+/game/*.booproj
+/game/*.svd
+/game/*.pdb
+/game/*.mdb
+/game/*.opendb
+/game/*.VC.db
+/game/sysinfo.txt
+/game/crashlytics-build.properties
+
+# 빌드 산출물
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# IDE
+.vs/
+.idea/

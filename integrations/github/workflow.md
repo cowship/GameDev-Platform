@@ -2,10 +2,11 @@
 
 ---
 
-> **적용 범위**: 이 문서는 GameDev-Platform 저장소 자체의 운영 규칙이 아니라,
-> Stage 6에서 생성되는 게임 프로젝트 Repository가 따를 협업 표준입니다.
-> GameDev-Platform 자체의 구조적 의사결정은 `docs/decisions/`(ADR)를 Single Source of Truth로
-> 사용하며, `main`에 직접 커밋·push하는 방식으로 운영됩니다.
+> **적용 범위**: 이 문서는 **이 저장소(`cowship/GameDev-Platform`)의 협업 표준**입니다.
+> 2026-09-02부로 이 저장소는 플랫폼 문서와 실제 게임 프로젝트(`game/`)를 함께 담게 되었고,
+> 5인 팀이 함께 사용합니다 ([ADR 0006](../../docs/decisions/0006-game-development-in-platform-repository.md)).
+> 그에 따라 기존의 "1인 main 직접 커밋" 운영에서 **PR 기반 협업**으로 전환했습니다.
+> 팀원 관점의 일상 절차와 Unity 특화 규칙은 [docs/team/README.md](../../docs/team/README.md)를 참고하세요.
 
 ---
 
@@ -20,22 +21,25 @@ GitHub는 코드 변경 이력과 협업 과정을 투명하게 기록하는 기
 # Branch Strategy
 
 ```text
-main
+main                        ← 게임 개발 본류 (직접 push 금지, PR로만 병합)
+├── feature/{name}          ← 신규 기능
+├── fix/{name}              ← 버그 수정
+├── chore/{name}            ← 문서, 설정, 스크립트 등 비기능 변경
 │
-├── develop
-│   │
-│   ├── feature/{name}
-│   ├── fix/{name}
-│   └── chore/{name}
+└── sandbox/{팀원이름}       ← 개인 실험/공부 전용 (main에 직접 병합하지 않음)
 ```
 
-| Branch | 용도 |
-|---|---|
-| main | 배포 가능한 안정 버전 |
-| develop | 다음 릴리즈를 위한 통합 Branch |
-| feature/* | 신규 기능 개발 |
-| fix/* | 버그 수정 |
-| chore/* | 문서, 설정 등 비기능 변경 |
+| Branch | 용도 | main 병합 | 리뷰 |
+|---|---|---|---|
+| main | 팀이 함께 만드는 게임의 단일 기준. 항상 열리고 실행되는 상태를 유지 | — | — |
+| feature/* | 신규 기능 개발 | PR | 1명 이상 |
+| fix/* | 버그 수정 | PR | 1명 이상 |
+| chore/* | 문서, 설정 등 비기능 변경 | PR | 1명 이상 |
+| sandbox/* | 팀원 개인의 기능 실험·학습 공간. 소유자만 push하며 force push 허용 | **하지 않음** | 불필요 |
+
+`develop` 통합 Branch는 두지 않습니다. 팀 규모가 5명이고 아직 배포 대상이 없어, `main`과 `develop`을 이중으로 관리하는 비용이 얻는 안정성보다 큽니다. 정식 릴리즈를 시작해 "개발 중인 main"과 "출시된 버전"을 분리해야 하는 시점이 오면 그때 재도입합니다 ([ADR 0006](../../docs/decisions/0006-game-development-in-platform-repository.md) Alternatives 참고).
+
+sandbox Branch의 상세 운영 규칙(실험 결과를 main으로 옮기는 방법 포함)은 [docs/team/README.md](../../docs/team/README.md)에 있습니다.
 
 ---
 
@@ -69,11 +73,11 @@ docs: Add GitHub integration setup guide
 
 # Pull Request Process
 
-1. `develop`에서 작업 Branch 생성
-2. 작업 완료 후 PR 생성 (대상: `develop`)
-3. PR 설명에 변경 목적과 주요 내용 작성
-4. Review 요청
-5. Approve 후 Merge
+1. `main`에서 작업 Branch 생성
+2. 작업 완료 후 PR 생성 (대상: `main`)
+3. [PR 템플릿](../../.github/PULL_REQUEST_TEMPLATE.md)의 변경 목적·체크리스트 작성
+4. Review 요청 (`.github/CODEOWNERS`에 따라 자동 배정)
+5. Approve 후 **Squash and merge**
 6. 작업 Branch 삭제
 
 ---

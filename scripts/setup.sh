@@ -38,7 +38,11 @@ echo "1. Read the setup documentation:"
 echo "   docs/setup/"
 echo
 
-echo "2. Configure Unity MCP (Unity 프로젝트 생성 후, ./scripts/setup_unity_workspace.sh 실행 — integrations/mcp/servers.md 참고)"
+echo "2. Configure Unity MCP: ./scripts/setup_unity_workspace.sh (Unity Editor를 1회 실행한 뒤)"
+echo
+
+echo "3. Unity 게임 개발에 참여한다면: ./scripts/setup_team_member.sh"
+echo "   (Git LFS, Scene 병합 도구, 개인 sandbox 브랜치 설정 — docs/team/ONBOARDING.md 참고)"
 echo
 
 if [ "$ENV_STATUS" -eq 0 ] && [ "$MCP_STATUS" -eq 0 ] && [ "$SKILLS_STATUS" -eq 0 ]; then

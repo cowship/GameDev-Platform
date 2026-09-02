@@ -47,9 +47,19 @@ github/
 | Document | Description |
 |----------|-------------|
 | setup.md | GitHub 계정, SSH, Repository 초기 설정 |
-| workflow.md | Branch 전략, Commit Convention, PR/Review 프로세스 |
+| workflow.md | Branch 전략(main / feature / sandbox), Commit Convention, PR/Review 프로세스 |
 | automation.md | GameDev-Platform 자신을 검증하는 GitHub Actions self-CI 전략 |
-| templates.md | Stage 6 게임 프로젝트 Repository용 Issue/PR Template, Notion 연동 규칙 |
+| templates.md | Issue/PR Template 설계 근거, Notion 연동 규칙 |
+
+---
+
+# Related Documents (Outside this Directory)
+
+| Document | Description |
+|----------|-------------|
+| [docs/team/README.md](../../docs/team/README.md) | 팀원이 매일 따르는 협업 절차 (Branch 사용법, Unity 공동 작업 규칙) |
+| [docs/team/ONBOARDING.md](../../docs/team/ONBOARDING.md) | 팀원 최초 환경 구축 |
+| [.github/CODEOWNERS](../../.github/CODEOWNERS) | 영역별 리뷰어 자동 배정
 
 ---
 

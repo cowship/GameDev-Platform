@@ -1,21 +1,31 @@
 # Issue / PR Templates
 
-> Stage 6에서 생성되는 **게임 프로젝트 Repository**가 사용할 Issue/PR Template과 Notion 연동 규칙입니다.
+> 이 저장소의 Issue/PR Template 설계 근거와 Notion 연동 규칙입니다.
 
 ---
 
 # Scope
 
-> **적용 범위**: [workflow.md](workflow.md)와 동일한 스코프입니다 — GameDev-Platform 저장소 자체의 규칙이 아니라 Stage 6에서 생성되는 게임 프로젝트 Repository가 따를 표준입니다.
-> GameDev-Platform 자체는 Issue를 쓰지 않고 `docs/decisions/`(ADR) + main 직접 커밋으로 운영되므로, 이 저장소에 `.github/ISSUE_TEMPLATE/`을 실제로 만들지 않습니다. 아래 템플릿 내용은 **게임 Repo 생성 시 그대로 복사해 쓰는 원본**입니다 (`templates/`(루트) 디렉토리가 ADR/회의록 템플릿을 문서로 담아두는 것과 동일한 패턴).
+> **적용 범위**: [workflow.md](workflow.md)와 동일하게 **이 저장소**에 적용됩니다.
+> 초기에는 "게임은 별도 Repository에 두므로 이 저장소에는 `.github/ISSUE_TEMPLATE/`을 만들지 않는다"는 방침이었으나, 게임 개발이 이 저장소의 `game/`에서 이루어지게 되면서([ADR 0006](../../docs/decisions/0006-game-development-in-platform-repository.md)) **실제 템플릿 파일을 생성했습니다.**
 
-Issue를 언제 어떻게 쓰는지의 상황별 처리 규칙은 [workflow.md의 Issue 관리](workflow.md#issue-관리)를 따릅니다. 이 문서는 그 규칙에 맞는 **템플릿 본문**과 **Notion 연동 규칙**만 다룹니다.
+| 실제 파일 | 용도 |
+|---|---|
+| [.github/PULL_REQUEST_TEMPLATE.md](../../.github/PULL_REQUEST_TEMPLATE.md) | PR 작성 시 자동 삽입 |
+| [.github/ISSUE_TEMPLATE/bug_report.md](../../.github/ISSUE_TEMPLATE/bug_report.md) | 버그 보고 |
+| [.github/ISSUE_TEMPLATE/feature_request.md](../../.github/ISSUE_TEMPLATE/feature_request.md) | 기능 제안 |
+| [.github/ISSUE_TEMPLATE/task.md](../../.github/ISSUE_TEMPLATE/task.md) | 일반 작업 |
+| [.github/CODEOWNERS](../../.github/CODEOWNERS) | 영역별 리뷰어 자동 배정 (팀원 계정 입력 후 활성화) |
+
+아래 본문은 그 파일들의 설계 근거이자, 다른 프로젝트에서 재사용할 때의 원본입니다. 실제 동작하는 파일과 아래 내용이 어긋나면 **실제 파일이 Source of Truth**입니다.
+
+Issue를 언제 어떻게 쓰는지의 상황별 처리 규칙은 [workflow.md의 Issue 관리](workflow.md#issue-관리)를 따릅니다.
 
 ---
 
 # Issue Templates
 
-게임 Repo에서 `.github/ISSUE_TEMPLATE/` 아래 파일명 그대로 저장해 사용합니다.
+`.github/ISSUE_TEMPLATE/` 아래 파일명 그대로 저장해 사용합니다. 아래는 이 저장소에 실제로 반영된 내용의 기준선이며, 게임 특성에 맞춘 항목(Unity 버전, 네트워크 역할 등)이 실제 파일에 추가되어 있습니다.
 
 ## Bug Report (`bug_report.md`)
 
@@ -103,7 +113,7 @@ labels: task
 
 # Pull Request Template
 
-게임 Repo 루트에 `.github/PULL_REQUEST_TEMPLATE.md`로 저장해 사용합니다. [workflow.md의 Pull Request Process](workflow.md#pull-request-process) 1~6단계와 짝을 이룹니다.
+저장소 루트의 `.github/PULL_REQUEST_TEMPLATE.md`에 저장해 사용합니다. [workflow.md의 Pull Request Process](workflow.md#pull-request-process) 1~6단계와 짝을 이룹니다.
 
 ```markdown
 ## 변경 목적

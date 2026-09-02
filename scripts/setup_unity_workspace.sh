@@ -47,6 +47,7 @@ else
         && chmod +x "$HOME/.local/bin/git-lfs"; then
         git-lfs install >/dev/null
         printf "✅ %s 설치 완료\n" "$(git-lfs version)"
+        # shellcheck disable=SC2016  # .bashrc에는 확장되지 않은 리터럴 $HOME/$PATH가 들어가야 합니다.
         grep -q '.local/bin' "$HOME/.bashrc" 2>/dev/null || echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
     else
         echo "❌ git-lfs 자동 설치 실패. 수동 설치: https://github.com/git-lfs/git-lfs/releases"
@@ -96,7 +97,7 @@ else
         else
             echo "ℹ️  Unity CLI(unity.exe)를 찾지 못했습니다. Unity Hub(43.4.0 이상)를 실행해"
             echo "   CLI가 자동 설치되게 한 뒤 이 스크립트를 다시 실행하세요."
-            echo "   (수동 확인: Windows에서 %LOCALAPPDATA%\\Unity\\bin\\unity.exe 존재 여부)"
+            printf '   (수동 확인: Windows에서 %%LOCALAPPDATA%%\\Unity\\bin\\unity.exe 존재 여부)\n'
         fi
     fi
 

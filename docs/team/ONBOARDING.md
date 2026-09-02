@@ -14,6 +14,7 @@
 | Unity Hub | |
 | Unity Editor **6000.3.22f1** | 버전이 다르면 프로젝트 파일이 갈립니다 |
 | GitHub 계정 | 이 저장소의 Collaborator 초대를 수락해야 합니다 |
+| [GitHub CLI](https://cli.github.com/) | 터미널에서 PR을 다룹니다. 4단계에서 설치합니다 |
 
 아래 명령은 모두 **Git Bash**에서 실행합니다 (시작 메뉴 → `Git Bash`).
 
@@ -21,11 +22,11 @@
 
 # 전체 순서 — 본격 작업 전에 끝내야 하는 것들
 
-이 문서의 1~8단계는 **팀원 각자**가 수행합니다. 다만 그중 하나만은 **팀에서 한 명만** 하고, 나머지는 그 결과를 `git pull`로 받습니다.
+이 문서의 1~9단계는 **팀원 각자**가 수행합니다. 다만 그중 하나만은 **팀에서 한 명만** 하고, 나머지는 그 결과를 `git pull`로 받습니다.
 
 | 한 명만 하는 작업 | 어디에 | 현재 상태 |
 |---|---|---|
-| Unity로 `game/` 최초 실행 → 생성된 `.meta`·`packages-lock.json` 커밋 | 4단계 | ✅ 완료 (2026-09-02) |
+| Unity로 `game/` 최초 실행 → 생성된 `.meta`·`packages-lock.json` 커밋 | 5단계 | ✅ 완료 (2026-09-02) |
 
 이것이 `main`에 올라가기 전에 다른 사람이 Unity를 열면 **각자 다른 GUID로 `.meta`가 생성되어 참조가 깨집니다.** 병합으로 깔끔히 풀리지 않으니 순서를 지켜야 합니다.
 
@@ -36,17 +37,17 @@
 | # | 작업 | 상태 |
 |---|---|---|
 | 0-1 | 1~3단계 수행 (SSH Key → clone → `setup_team_member.sh`) | ✅ |
-| 0-2 | 4단계 — Unity로 `game/` 열기 → 생성물 커밋 → PR 만들고 바로 머지 | ✅ |
+| 0-2 | 5단계 — Unity로 `game/` 열기 → 생성물 커밋 → PR 만들고 바로 머지 | ✅ |
 | 0-3 | 팀에 "pull 받고 시작하세요" 공지 | ✅ |
 
 ## Phase 1 — 나머지 팀원 4명
 
-Phase 0이 끝났으므로 **지금 바로 1~8단계를 순서대로 진행하면 됩니다.**
+Phase 0이 끝났으므로 **지금 바로 1~9단계를 순서대로 진행하면 됩니다.**
 
 ## Phase 2 — 본격 개발 시작
 
 - [ ] 역할 분담 확정 → [docs/team/README.md](README.md)의 "역할 분담" 표와 [.github/CODEOWNERS](../../.github/CODEOWNERS) 동시 갱신
-- [ ] 게임 제목 확정 → `game/ProjectSettings/ProjectSettings.asset`의 `productName`(현재 임시값) 변경
+- [x] 게임 제목 확정 → `productName`이 `NGOgame`으로 반영됨 (2026-09-02)
 - [ ] NetworkManager Prefab 생성 → [integrations/netcode/setup.md](../../integrations/netcode/setup.md)
 - [ ] 첫 Issue 등록 및 Sprint 시작
 
@@ -109,7 +110,72 @@ cd GameDev-Platform
 
 ---
 
-# 4. Unity 프로젝트 열기
+# 4. GitHub CLI (`gh`) 설치와 로그인
+
+`gh`는 터미널에서 GitHub을 다루는 도구입니다. 이것이 있으면 **Pull Request를 만들고 리뷰하고 병합하는 일을 브라우저로 가지 않고** 처리할 수 있습니다.
+
+```bash
+gh pr create --base main --fill
+```
+
+없어도 GitHub 웹에서 PR을 만들 수 있지만, 이 저장소의 작업 흐름은 전부 Git Bash 안에서 끝나므로 설치를 권합니다.
+
+## 설치
+
+**PowerShell**에서 실행하고, 끝나면 **Git Bash를 새로 엽니다.**
+
+```powershell
+winget install --id GitHub.cli
+```
+
+```bash
+gh --version
+```
+
+> Windows는 이미 켜져 있는 터미널에 PATH를 반영해주지 않습니다. "분명 설치했는데 명령어를 못 찾는다"의 대부분이 이것입니다.
+
+## 로그인
+
+```bash
+gh auth login
+```
+
+질문이 순서대로 나옵니다. 방향키로 고르고 엔터를 누르면 됩니다.
+
+| 질문 | 선택 |
+|---|---|
+| What account do you want to log into? | **GitHub.com** |
+| What is your preferred protocol for Git operations? | **SSH** (1단계에서 키를 등록했으므로) |
+| Upload your SSH public key to your GitHub account? | **Skip** (이미 올려둔 키가 있습니다) |
+| How would you like to authenticate? | **Login with a web browser** |
+
+마지막에 `XXXX-XXXX` 형태의 일회용 코드가 표시됩니다. **이 코드를 복사한 뒤** 엔터를 누르면 브라우저가 열리므로, 붙여넣고 승인하면 끝입니다.
+
+```bash
+gh auth status
+```
+
+`✓ Logged in to github.com account 본인계정`이 나오면 성공입니다.
+
+> **PAT(토큰)를 따로 만들 필요는 없습니다.** 브라우저 로그인이 필요한 권한을 알아서 받아옵니다.
+>
+> 7단계의 `setup_mcp.sh`가 요구하는 PAT는 이것과 **별개**입니다. 그쪽은 Claude Code의 GitHub MCP가 쓰는 토큰이라 따로 준비해야 합니다.
+
+## 자주 쓰는 명령
+
+```bash
+gh pr create --base main --web     # 브라우저에서 템플릿을 채워 PR 생성
+gh pr list                          # 열려 있는 PR 목록
+gh pr checkout 5                    # 남의 PR을 내 PC로 받아 Unity에서 확인
+gh pr review 5 --approve
+gh pr merge 5 --squash --delete-branch
+```
+
+`gh pr checkout`이 특히 유용합니다. Unity 프로젝트는 코드만 봐서는 판단이 어려운 경우가 많은데, 이 명령으로 상대 브랜치를 받아 **직접 Play해보고** 승인할 수 있습니다.
+
+---
+
+# 5. Unity 프로젝트 열기
 
 1. Unity Hub → **Add** → **Add project from disk**
 2. 저장소 안의 **`game/` 폴더**를 선택합니다 (저장소 루트가 아닙니다)
@@ -173,7 +239,7 @@ git pull 받은 뒤 Unity Hub로 game/ 폴더를 열어주세요.
 
 ---
 
-# 5. 네트워킹 (Netcode for GameObjects)
+# 6. 네트워킹 (Netcode for GameObjects)
 
 **따로 설치할 것이 없습니다.** NGO는 Unity 공식 패키지라 `game/Packages/manifest.json`에 버전이 고정되어 있고, 프로젝트를 열면 Package Manager가 자동으로 받아옵니다.
 
@@ -197,7 +263,7 @@ git pull 받은 뒤 Unity Hub로 game/ 폴더를 열어주세요.
 
 ---
 
-# 6. (선택) Claude Code 사용
+# 7. (선택) Claude Code 사용
 
 Claude Code를 쓰는 팀원만 해당됩니다.
 
@@ -210,9 +276,10 @@ Claude Code를 쓰는 팀원만 해당됩니다.
 
 ---
 
-# 7. 동작 확인
+# 8. 동작 확인
 
 - [ ] `ssh -T git@github.com`에 본인 계정 이름이 나온다
+- [ ] `gh auth status`에 본인 계정이 나온다
 - [ ] Unity Console에 빨간 에러가 없다
 - [ ] `game/Assets/Scenes/SampleScene.unity`가 열리고 Play가 된다
 - [ ] `Window > General > Test Runner`에 EditMode/PlayMode 탭이 보인다
@@ -220,7 +287,7 @@ Claude Code를 쓰는 팀원만 해당됩니다.
 
 ---
 
-# 8. 본격 작업 시작 전 최종 확인
+# 9. 본격 작업 시작 전 최종 확인
 
 여기까지 오면 개인 환경은 끝입니다. 팀 전체 기준으로 아래가 모두 채워져야 게임 개발을 시작할 수 있습니다.
 
@@ -233,7 +300,7 @@ Claude Code를 쓰는 팀원만 해당됩니다.
 
 ---
 
-# 9. 다음 단계
+# 10. 다음 단계
 
 [docs/team/README.md](README.md)의 Branch 전략과 Unity 공동 작업 규칙을 읽습니다. 특히 아래 3가지가 사고가 잦은 지점입니다.
 
@@ -298,15 +365,27 @@ git remote set-url origin https://github.com/cowship/GameDev-Platform.git
 git push -u origin <브랜치이름>
 ```
 
+## `gh` 명령이 인증을 요구합니다
+
+```text
+To get started with GitHub CLI, please run: gh auth login
+```
+
+로그인이 되어 있지 않은 상태입니다. 4단계의 로그인 절차를 진행하세요. **WSL에서 해둔 로그인은 Windows로 넘어오지 않습니다.** 현재 상태는 `gh auth status`로 확인합니다.
+
 ## `gh: command not found`
 
-GitHub CLI는 선택 사항입니다. 설치하지 않고 **GitHub 웹에서 PR을 만들어도 됩니다** — push 후 저장소 페이지에 뜨는 `Compare & pull request` 버튼을 누르거나, 아래 주소로 바로 이동합니다.
+설치되지 않았거나, 설치 후 터미널을 새로 열지 않은 경우입니다. **Git Bash를 닫고 새로 열어보세요.** 그래도 없으면 PowerShell에서 설치합니다.
+
+```powershell
+winget install --id GitHub.cli
+```
+
+`gh`를 설치하지 않고 GitHub 웹에서 PR을 만들어도 됩니다. push 후 저장소 페이지에 뜨는 `Compare & pull request` 버튼을 누르거나, 아래 주소로 바로 이동합니다.
 
 ```text
 https://github.com/cowship/GameDev-Platform/pull/new/<브랜치이름>
 ```
-
-설치하고 싶다면 PowerShell에서 `winget install --id GitHub.cli` 실행 후 Git Bash를 새로 엽니다.
 
 ---
 

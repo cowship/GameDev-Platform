@@ -20,6 +20,41 @@
 
 ---
 
+# 전체 순서 — 본격 작업 전에 끝내야 하는 것들
+
+이 문서의 1~8단계는 **팀원 각자**가 수행합니다. 다만 그중 두 가지는 **팀에서 한 명만** 하고 나머지는 그 결과를 `git pull`로 받습니다.
+
+| 한 명만 하는 작업 | 어디에 | 현재 상태 |
+|---|---|---|
+| Unity로 `game/` 최초 실행 → 생성된 `.meta`·`packages-lock.json` 커밋 | 4단계 | ⬜ 아직 아무도 안 함 |
+| Photon Fusion SDK import + App Id 입력 | 5단계 | ⬜ 아직 아무도 안 함 |
+
+이 두 가지가 `main`에 올라가기 전에 다른 사람이 Unity를 열면 **각자 다른 GUID로 `.meta`가 생성되어 참조가 깨집니다.** 병합으로 깔끔히 풀리지 않으니 순서를 지켜야 합니다.
+
+## Phase 0 — 부트스트랩 (담당자 1명)
+
+| # | 작업 | 참고 |
+|---|---|---|
+| 0-1 | 1~3단계 수행 (SSH Key → clone → `setup_team_member.sh`) | 아래 |
+| 0-2 | 4단계 — Unity로 `game/` 열기 → 생성물 커밋 → **PR 만들고 바로 머지** | [4단계](#4-unity-프로젝트-열기) |
+| 0-3 | 팀에 "pull 받고 시작하세요" 공지 | |
+| 0-4 | 5단계 — Fusion SDK import + App Id → **별도 PR** → 머지 | [5단계](#5-photon-fusion-설정) |
+| 0-5 | 팀에 App Id 공유 및 공지 | |
+
+> ⚠️ 0-2와 0-4를 **한 커밋에 섞지 마세요.** Fusion SDK는 파일 수가 많아 diff가 거대해집니다. 섞이면 나중에 어느 쪽이 문제인지 가려낼 수 없고, 되돌리기도 어려워집니다.
+
+## Phase 1 — 나머지 팀원 4명 (Phase 0 완료 공지 이후)
+
+1~3단계는 Phase 0을 기다리지 않고 **미리 해도 됩니다.** 4단계(Unity 열기)부터는 공지를 받은 뒤에 진행합니다.
+
+## Phase 2 — 본격 개발 시작
+
+- [ ] 역할 분담 확정 → [docs/team/README.md](README.md)의 "역할 분담" 표와 [.github/CODEOWNERS](../../.github/CODEOWNERS) 동시 갱신
+- [ ] 게임 제목 확정 → `game/ProjectSettings/ProjectSettings.asset`의 `productName`(현재 임시값 `FusionGame`) 변경
+- [ ] 첫 Issue 등록 및 Sprint 시작
+
+---
+
 # 1. SSH Key 등록
 
 ```bash
@@ -99,17 +134,45 @@ This project was last opened with a different version of the Editor.
 
 `game/`은 아직 Unity로 열린 적이 없는 상태로 커밋되어 있습니다. 처음 여는 사람은 `git status`에 **폴더별 `.meta` 파일이 새로 생성**된 것을 보게 됩니다. Unity가 `Assets/` 하위 폴더마다 GUID를 부여하며 만드는 파일이라 **정상**이며, 반드시 커밋해야 합니다. 커밋하지 않으면 다음 사람이 열 때 다른 GUID가 생성되어 참조가 어긋납니다.
 
+### 커밋 전에 `git status` 확인
+
+아래와 같이 **추가만 있고 기존 파일 수정이 거의 없어야** 정상입니다.
+
+| 파일 | 예상 상태 | 커밋 |
+|---|---|---|
+| `game/Assets/**/*.meta` | 새로 추가 (폴더마다) | ✅ |
+| `game/Packages/packages-lock.json` | 새로 추가 — 팀 전원의 패키지 버전을 고정합니다 | ✅ |
+| `game/ProjectSettings/ProjectVersion.txt` | 수정 — `m_EditorVersionWithRevision` 줄이 채워짐 | ✅ |
+| `game/Assets/Settings/*.asset` | 수정될 수 있음 — URP 업그레이드 결과 | ✅ |
+| `game/Library/`, `game/UserSettings/`, `game/Logs/` | `.gitignore` 대상이라 **아예 보이지 않아야** 함 | — |
+
+`ProjectSettings/`의 **다른** 파일들이 무더기로 수정됐다면 멈추세요. Editor 버전 불일치 신호입니다. 커밋하지 말고 팀에 알립니다.
+
+### 커밋 및 머지
+
 ```bash
 git switch -c chore/unity-first-open
 git add game/
 git commit -m "chore: Unity 최초 실행으로 생성된 .meta 및 패키지 lock 추가"
 git push -u origin chore/unity-first-open
-# → PR 생성 후 main에 병합
+gh pr create --base main --fill     # 또는 GitHub 웹에서 PR 생성
 ```
 
-`Packages/packages-lock.json`도 이때 함께 생성됩니다. 같이 커밋하세요 — 팀 전원의 패키지 버전을 고정해 줍니다.
+> **이 PR은 리뷰를 기다리지 말고 본인이 바로 Squash and merge 하세요.**
+>
+> 평소에는 `main` 병합 전에 1명 이상의 Approve를 받는 것이 규칙입니다([docs/team/README.md](README.md)). 이 커밋만 예외로 두는 이유는 두 가지입니다.
+>
+> - 내용이 전부 Unity가 기계적으로 생성한 산출물이라 사람이 검토할 대상이 없습니다.
+> - 나머지 팀원 4명이 이 커밋을 받아야 작업을 시작할 수 있어, 대기 비용이 리뷰의 가치보다 큽니다.
+>
+> PR 자체는 남기세요. 기록이 남고, 팀의 첫 PR 흐름을 한 번 굴려보는 의미도 있습니다.
 
-반대로 **기존 파일이 대량 수정**된 것으로 나온다면 Editor 버전이 다를 가능성이 높습니다. 커밋하지 말고 팀에 알려주세요.
+머지한 뒤 **팀에 공지**합니다.
+
+```text
+game/ 최초 실행 커밋이 main에 올라갔습니다.
+git pull 받은 뒤 Unity Hub로 game/ 폴더를 열어주세요.
+```
 
 ---
 
@@ -118,7 +181,24 @@ git push -u origin chore/unity-first-open
 [integrations/photon/setup.md](../../integrations/photon/setup.md)를 따릅니다. 요약하면 이렇습니다.
 
 1. Fusion SDK(`.unitypackage`) import — **최초 1명만** 수행하고 커밋합니다. 이미 `game/Assets/Photon/`이 있다면 건너뜁니다.
-2. 팀 공용 App Id를 `Tools > Fusion > Realtime Settings`에 입력합니다.
+2. 팀 공용 App Id를 `Tools > Fusion > Realtime Settings`에 입력합니다. **팀 전체가 같은 App Id를 써야** 서로 접속됩니다.
+
+## 언제 main에 머지하나
+
+4단계의 최초 실행 커밋이 **머지된 뒤에**, 그와 **별도의 PR**로 올립니다.
+
+```bash
+git switch main && git pull
+git switch -c chore/import-fusion-sdk
+git add game/Assets/Photon game/ProjectSettings
+git commit -m "chore: Photon Fusion 2 SDK import 및 App Id 설정"
+git push -u origin chore/import-fusion-sdk
+gh pr create --base main --fill
+```
+
+이 PR도 리뷰 대기 없이 바로 머지해도 됩니다 — 내용이 외부 SDK 원본이라 검토 대상이 아닙니다. 다만 **머지 전에 본인 환경에서 Console에 에러가 없는지는 반드시 확인**하세요. 여기서 깨진 채로 올라가면 팀 전원이 동시에 막힙니다.
+
+머지 후 팀에 공지하고 App Id를 공유합니다.
 
 ---
 
@@ -145,7 +225,20 @@ Claude Code를 쓰는 팀원만 해당됩니다.
 
 ---
 
-# 8. 다음 단계
+# 8. 본격 작업 시작 전 최종 확인
+
+여기까지 오면 개인 환경은 끝입니다. 팀 전체 기준으로 아래가 모두 채워져야 게임 개발을 시작할 수 있습니다.
+
+- [ ] `main`에 Unity 최초 실행 커밋이 들어가 있다 (`game/Assets/**/*.meta`, `packages-lock.json` 존재)
+- [ ] `main`에 Fusion SDK가 들어가 있다 (`game/Assets/Photon/` 존재)
+- [ ] 팀원 5명 전원이 `setup_team_member.sh`를 돌렸다
+- [ ] 팀원 5명 전원이 Unity로 `game/`을 열어 에러 없이 Play까지 확인했다
+- [ ] 역할 분담이 정해지고 [.github/CODEOWNERS](../../.github/CODEOWNERS)에 반영됐다
+- [ ] 각자 `sandbox/{본인계정}` 브랜치를 확인했다
+
+---
+
+# 9. 다음 단계
 
 [docs/team/README.md](README.md)의 Branch 전략과 Unity 공동 작업 규칙을 읽습니다. 특히 아래 3가지가 사고가 잦은 지점입니다.
 

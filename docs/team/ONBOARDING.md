@@ -24,7 +24,16 @@ git clone git@github.com:cowship/GameDev-Platform.git
 cd GameDev-Platform
 ```
 
-> **어디에 clone 할지**: Unity Editor는 Windows에서 실행되므로, **Windows 파일 시스템**(예: `D:\Work\GameDev-Platform`)에 clone하는 것을 권장합니다. WSL 내부 경로(`/home/...`)에 둔 프로젝트를 Windows Unity로 열면 파일 접근이 네트워크 경유가 되어 Asset import와 컴파일이 눈에 띄게 느려집니다.
+> ⚠️ **반드시 Windows 파일 시스템에 clone하세요** (예: `D:\Work\GameDev-Platform`).
+>
+> WSL 내부 경로(`/home/...`)에 둔 프로젝트는 Windows용 Unity Editor가 **열지 못합니다.** 실측 결과 `\\wsl.localhost\...` 경로로 프로젝트를 열면 다음과 같이 거부됩니다.
+>
+> ```text
+> DisplayDialog: Project folder or disk is read only
+> Please move the project folder somewhere readable and writable.
+> ```
+>
+> Claude Code를 WSL에서 쓰기 위해 WSL 쪽에도 clone을 두고 싶다면, **Unity 작업용 clone은 별도로 Windows 드라이브에 두세요.**
 
 ---
 

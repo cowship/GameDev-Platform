@@ -14,7 +14,6 @@
 | Unity Hub | |
 | Unity Editor **6000.3.22f1** | 버전이 다르면 프로젝트 파일이 갈립니다 |
 | GitHub 계정 | 이 저장소의 Collaborator 초대를 수락해야 합니다 |
-| Photon 계정 (무료) | Fusion App Id 발급용 |
 
 아래 명령은 모두 **Git Bash**에서 실행합니다 (시작 메뉴 → `Git Bash`).
 
@@ -22,35 +21,33 @@
 
 # 전체 순서 — 본격 작업 전에 끝내야 하는 것들
 
-이 문서의 1~8단계는 **팀원 각자**가 수행합니다. 다만 그중 두 가지는 **팀에서 한 명만** 하고 나머지는 그 결과를 `git pull`로 받습니다.
+이 문서의 1~8단계는 **팀원 각자**가 수행합니다. 다만 그중 하나만은 **팀에서 한 명만** 하고, 나머지는 그 결과를 `git pull`로 받습니다.
 
 | 한 명만 하는 작업 | 어디에 | 현재 상태 |
 |---|---|---|
-| Unity로 `game/` 최초 실행 → 생성된 `.meta`·`packages-lock.json` 커밋 | 4단계 | ⬜ 아직 아무도 안 함 |
-| Photon Fusion SDK import + App Id 입력 | 5단계 | ⬜ 아직 아무도 안 함 |
+| Unity로 `game/` 최초 실행 → 생성된 `.meta`·`packages-lock.json` 커밋 | 4단계 | ✅ 완료 (2026-09-02) |
 
-이 두 가지가 `main`에 올라가기 전에 다른 사람이 Unity를 열면 **각자 다른 GUID로 `.meta`가 생성되어 참조가 깨집니다.** 병합으로 깔끔히 풀리지 않으니 순서를 지켜야 합니다.
+이것이 `main`에 올라가기 전에 다른 사람이 Unity를 열면 **각자 다른 GUID로 `.meta`가 생성되어 참조가 깨집니다.** 병합으로 깔끔히 풀리지 않으니 순서를 지켜야 합니다.
 
-## Phase 0 — 부트스트랩 (담당자 1명)
+> 네트워킹은 **Netcode for GameObjects(NGO)** 를 쓰며, Unity 공식 패키지라 `manifest.json`에 이미 고정되어 있습니다. 따라서 **SDK를 따로 import하거나 계정·App Id를 발급받는 절차가 없습니다.** 프로젝트를 열면 자동으로 받아집니다 ([ADR 0009](../decisions/0009-netcode-for-gameobjects.md)).
 
-| # | 작업 | 참고 |
+## Phase 0 — 부트스트랩 (담당자 1명) — 완료됨
+
+| # | 작업 | 상태 |
 |---|---|---|
-| 0-1 | 1~3단계 수행 (SSH Key → clone → `setup_team_member.sh`) | 아래 |
-| 0-2 | 4단계 — Unity로 `game/` 열기 → 생성물 커밋 → **PR 만들고 바로 머지** | [4단계](#4-unity-프로젝트-열기) |
-| 0-3 | 팀에 "pull 받고 시작하세요" 공지 | |
-| 0-4 | 5단계 — Fusion SDK import + App Id → **별도 PR** → 머지 | [5단계](#5-photon-fusion-설정) |
-| 0-5 | 팀에 App Id 공유 및 공지 | |
+| 0-1 | 1~3단계 수행 (SSH Key → clone → `setup_team_member.sh`) | ✅ |
+| 0-2 | 4단계 — Unity로 `game/` 열기 → 생성물 커밋 → PR 만들고 바로 머지 | ✅ |
+| 0-3 | 팀에 "pull 받고 시작하세요" 공지 | ✅ |
 
-> ⚠️ 0-2와 0-4를 **한 커밋에 섞지 마세요.** Fusion SDK는 파일 수가 많아 diff가 거대해집니다. 섞이면 나중에 어느 쪽이 문제인지 가려낼 수 없고, 되돌리기도 어려워집니다.
+## Phase 1 — 나머지 팀원 4명
 
-## Phase 1 — 나머지 팀원 4명 (Phase 0 완료 공지 이후)
-
-1~3단계는 Phase 0을 기다리지 않고 **미리 해도 됩니다.** 4단계(Unity 열기)부터는 공지를 받은 뒤에 진행합니다.
+Phase 0이 끝났으므로 **지금 바로 1~8단계를 순서대로 진행하면 됩니다.**
 
 ## Phase 2 — 본격 개발 시작
 
 - [ ] 역할 분담 확정 → [docs/team/README.md](README.md)의 "역할 분담" 표와 [.github/CODEOWNERS](../../.github/CODEOWNERS) 동시 갱신
-- [ ] 게임 제목 확정 → `game/ProjectSettings/ProjectSettings.asset`의 `productName`(현재 임시값 `FusionGame`) 변경
+- [ ] 게임 제목 확정 → `game/ProjectSettings/ProjectSettings.asset`의 `productName`(현재 임시값) 변경
+- [ ] NetworkManager Prefab 생성 → [integrations/netcode/setup.md](../../integrations/netcode/setup.md)
 - [ ] 첫 Issue 등록 및 Sprint 시작
 
 ---
@@ -176,29 +173,27 @@ git pull 받은 뒤 Unity Hub로 game/ 폴더를 열어주세요.
 
 ---
 
-# 5. Photon Fusion 설정
+# 5. 네트워킹 (Netcode for GameObjects)
 
-[integrations/photon/setup.md](../../integrations/photon/setup.md)를 따릅니다. 요약하면 이렇습니다.
+**따로 설치할 것이 없습니다.** NGO는 Unity 공식 패키지라 `game/Packages/manifest.json`에 버전이 고정되어 있고, 프로젝트를 열면 Package Manager가 자동으로 받아옵니다.
 
-1. Fusion SDK(`.unitypackage`) import — **최초 1명만** 수행하고 커밋합니다. 이미 `game/Assets/Photon/`이 있다면 건너뜁니다.
-2. 팀 공용 App Id를 `Tools > Fusion > Realtime Settings`에 입력합니다. **팀 전체가 같은 App Id를 써야** 서로 접속됩니다.
-
-## 언제 main에 머지하나
-
-4단계의 최초 실행 커밋이 **머지된 뒤에**, 그와 **별도의 PR**로 올립니다.
-
-```bash
-git switch main && git pull
-git switch -c chore/import-fusion-sdk
-git add game/Assets/Photon game/ProjectSettings
-git commit -m "chore: Photon Fusion 2 SDK import 및 App Id 설정"
-git push -u origin chore/import-fusion-sdk
-gh pr create --base main --fill
+```json
+"com.unity.netcode.gameobjects": "2.13.1",
+"com.unity.multiplayer.playmode": "2.0.2"
 ```
 
-이 PR도 리뷰 대기 없이 바로 머지해도 됩니다 — 내용이 외부 SDK 원본이라 검토 대상이 아닙니다. 다만 **머지 전에 본인 환경에서 Console에 에러가 없는지는 반드시 확인**하세요. 여기서 깨진 채로 올라가면 팀 전원이 동시에 막힙니다.
+## 확인만 하세요
 
-머지 후 팀에 공지하고 App Id를 공유합니다.
+- [ ] `Window > Package Manager` → **In Project**에 `Netcode for GameObjects`가 보인다
+- [ ] `Window > Multiplayer > Multiplayer Play Mode` 메뉴가 있다
+
+`Multiplayer Play Mode`는 **빌드 없이 한 Editor에서 여러 플레이어를 띄우는** 도구입니다. 멀티플레이는 혼자 검증하기 어려운데, 이게 있으면 혼자서도 2인 상황을 재현할 수 있습니다.
+
+## 접속 범위
+
+현재 구성은 UnityTransport 기본값이라 **localhost와 같은 LAN(공유기)** 안에서만 접속됩니다. 서로 다른 네트워크(각자 집)에서 붙으려면 Relay가 필요하고, 이는 필요한 시점에 별도로 도입합니다. 배경은 [integrations/netcode/setup.md](../../integrations/netcode/setup.md#3-접속-방식)를 참고하세요.
+
+자세한 설정과 개발 규칙은 [integrations/netcode/](../../integrations/netcode/README.md)에 있습니다.
 
 ---
 
@@ -230,7 +225,7 @@ Claude Code를 쓰는 팀원만 해당됩니다.
 여기까지 오면 개인 환경은 끝입니다. 팀 전체 기준으로 아래가 모두 채워져야 게임 개발을 시작할 수 있습니다.
 
 - [ ] `main`에 Unity 최초 실행 커밋이 들어가 있다 (`game/Assets/**/*.meta`, `packages-lock.json` 존재)
-- [ ] `main`에 Fusion SDK가 들어가 있다 (`game/Assets/Photon/` 존재)
+- [ ] `Window > Package Manager`에 `Netcode for GameObjects`가 보인다
 - [ ] 팀원 5명 전원이 `setup_team_member.sh`를 돌렸다
 - [ ] 팀원 5명 전원이 Unity로 `game/`을 열어 에러 없이 Play까지 확인했다
 - [ ] 역할 분담이 정해지고 [.github/CODEOWNERS](../../.github/CODEOWNERS)에 반영됐다
@@ -320,7 +315,7 @@ https://github.com/cowship/GameDev-Platform/pull/new/<브랜치이름>
 | Document | Description |
 |---|---|
 | [README.md](README.md) | 팀 협업 규칙 (Branch 전략, Unity 공동 작업 규칙) |
-| [integrations/photon/setup.md](../../integrations/photon/setup.md) | Photon Fusion SDK 설치 |
+| [integrations/netcode/setup.md](../../integrations/netcode/setup.md) | Netcode for GameObjects 설정 |
 | [integrations/unity/setup.md](../../integrations/unity/setup.md) | Unity Hub / Editor / Git LFS 기본 설정 |
 | [docs/setup/README.md](../setup/README.md) | Claude Code / MCP 설정 |
 | [docs/decisions/0008-windows-only-development-environment.md](../decisions/0008-windows-only-development-environment.md) | WSL을 버리고 Windows 단일 환경으로 정한 근거 |

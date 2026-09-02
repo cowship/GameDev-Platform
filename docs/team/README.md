@@ -1,6 +1,6 @@
 # Team Collaboration Guide
 
-> 5인 팀이 이 저장소 하나에서 Unity + Photon Fusion 멀티플레이 게임을 함께 개발하기 위한 운영 규칙입니다.
+> 5인 팀이 이 저장소 하나에서 Unity 멀티플레이 게임을 함께 개발하기 위한 운영 규칙입니다.
 
 ---
 
@@ -23,7 +23,7 @@ GameDev-Platform/
 │
 ├── agents/                 ← AI Agent 역할 정의
 ├── docs/                   ← 아키텍처, 의사결정(ADR), 팀 운영 문서
-├── integrations/           ← Unity / GitHub / Photon / Notion / MCP 연동 표준
+├── integrations/           ← Unity / GitHub / Netcode / Notion / MCP 연동 표준
 ├── prompts/  templates/    ← 재사용 프롬프트, 문서 템플릿
 └── scripts/                ← 환경 구축 자동화 스크립트
 ```
@@ -96,7 +96,7 @@ gh pr create --base main            # 또는 GitHub 웹에서 PR 생성
 
 | 항목 | 규칙 |
 |---|---|
-| 목적 | 기능 실험, Fusion 튜토리얼 따라하기, 개인 학습, 실패해도 되는 시도 |
+| 목적 | 기능 실험, 네트워킹 튜토리얼 따라하기, 개인 학습, 실패해도 되는 시도 |
 | 소유 | 브랜치 이름의 본인만 push. 다른 사람 sandbox에 push하지 않습니다 |
 | 리뷰 | 불필요 |
 | 커밋 메시지 | 자유 |
@@ -193,15 +193,17 @@ git checkout --theirs game/Assets/Scenes/Main.unity   # 상대 버전 채택
 
 ---
 
-# 5. Photon Fusion 공동 작업 규칙
+# 5. 멀티플레이(NGO) 공동 작업 규칙
 
-자세한 설정 절차는 [integrations/photon/setup.md](../../integrations/photon/setup.md)를 따릅니다. 협업 관점에서 특히 주의할 점은 다음과 같습니다.
+네트워킹은 **Unity Netcode for GameObjects(NGO)** 를 사용합니다. Unity 공식 패키지라 별도 설치 절차가 없고, 프로젝트를 열면 자동으로 받아집니다. 자세한 내용은 [integrations/netcode/](../../integrations/netcode/README.md)를 참고하고, 협업 관점에서 특히 주의할 점은 다음과 같습니다.
 
-- **App Id는 팀 공용 1개**를 사용합니다. 각자 다른 App Id를 쓰면 서로 접속되지 않습니다.
-- **NetworkObject Prefab**은 `game/Assets/Prefabs/Network/` 아래에 모읍니다. Fusion이 관리하는 Prefab 목록이 한곳에 모여 있어야 충돌 지점을 예측할 수 있습니다.
-- 네트워크 Prefab을 추가·삭제하면 Fusion의 프로젝트 설정 자산도 함께 바뀝니다. **PR에 반드시 같이 포함**시켜 주세요. 빠지면 다른 팀원 쪽에서 스폰이 실패합니다.
-- 동기화 대상(`[Networked]` 프로퍼티) 추가는 클라이언트 전원이 같은 버전을 써야 동작합니다. 관련 PR은 빠르게 병합하고 팀에 공지합니다.
-- 멀티플레이 동작 확인은 혼자서도 가능합니다 — Unity의 **Multiplayer Play Mode**를 쓰거나, 빌드를 2개 실행해 붙습니다.
+- **네트워크 Prefab 목록(`NetworkPrefabsList` 자산)이 이 프로젝트에서 가장 충돌이 잦은 파일입니다.** 두 사람이 각자 네트워크 Prefab을 추가하면 같은 파일의 같은 위치를 고치게 됩니다. 네트워크 Prefab 추가는 **작은 PR로 빠르게** 병합하세요.
+- 그 충돌은 **텍스트로 직접 병합하지 마세요.** GUID가 얽혀 있어 손으로 고치면 조용히 깨집니다. 한쪽을 채택하고 나머지를 Unity에서 다시 등록하는 편이 안전합니다.
+- **NetworkObject Prefab**은 `game/Assets/Prefabs/Network/` 아래에 모읍니다. 충돌 지점을 한곳으로 모아 예측 가능하게 만들기 위함입니다.
+- **NetworkManager는 씬이 아니라 Prefab으로 관리합니다.** 씬에 두면 그 씬이 팀의 병목이 됩니다.
+- `NetworkVariable`이나 RPC의 구조를 바꾸면 클라이언트 간 호환이 깨집니다. 관련 PR은 빠르게 병합하고 팀에 공지해, 전원이 pull 받은 뒤 다음 테스트를 진행합니다.
+- 멀티플레이 동작 확인은 혼자서도 가능합니다 — `Window > Multiplayer > Multiplayer Play Mode`로 빌드 없이 여러 플레이어를 띄웁니다.
+- 현재 구성은 **localhost와 같은 LAN 안에서만** 접속됩니다. 각자 집에서 붙는 것은 Relay 도입 이후에 가능합니다.
 
 ---
 
@@ -211,7 +213,7 @@ git checkout --theirs game/Assets/Scenes/Main.unity   # 상대 버전 채택
 
 | 영역 | 경로 | 담당 |
 |---|---|---|
-| 네트워크 / Fusion | `game/Assets/Scripts/Networking/` | (미정) |
+| 네트워크 (NGO) | `game/Assets/Scripts/Networking/` | (미정) |
 | 게임플레이 | `game/Assets/Scripts/Gameplay/` | (미정) |
 | UI | `game/Assets/Scripts/UI/` | (미정) |
 | 아트 | `game/Assets/Art/` | (미정) |
@@ -263,7 +265,7 @@ git checkout --theirs game/Assets/Scenes/Main.unity   # 상대 버전 채택
 | [ONBOARDING.md](ONBOARDING.md) | 팀원이 처음 한 번 수행하는 환경 구축 절차 |
 | [integrations/github/workflow.md](../../integrations/github/workflow.md) | Branch/Commit/PR 표준 (원본) |
 | [integrations/unity/workflow.md](../../integrations/unity/workflow.md) | Unity 버전 관리 규칙, Smart Merge, LFS Locking (원본) |
-| [integrations/photon/setup.md](../../integrations/photon/setup.md) | Photon Fusion SDK 설치 및 App Id 설정 |
+| [integrations/netcode/setup.md](../../integrations/netcode/setup.md) | Netcode for GameObjects 설정 |
 | [integrations/unity/project_template.md](../../integrations/unity/project_template.md) | Assets 폴더 구조와 의존성 방향 |
 | [docs/decisions/0006-game-development-in-platform-repository.md](../decisions/0006-game-development-in-platform-repository.md) | 게임을 이 저장소에서 개발하기로 한 결정 근거 |
-| [docs/decisions/0007-photon-fusion-multiplayer-stack.md](../decisions/0007-photon-fusion-multiplayer-stack.md) | Photon Fusion 및 Unity 프로젝트 구성 결정 근거 |
+| [docs/decisions/0009-netcode-for-gameobjects.md](../decisions/0009-netcode-for-gameobjects.md) | 멀티플레이 스택을 NGO로 정한 결정 근거 |

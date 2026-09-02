@@ -13,7 +13,7 @@
 | 프로젝트 경로 | `game/` |
 | Editor 버전 | `6000.3.22f1` |
 | Render Pipeline | URP (2D) |
-| 네트워킹 | Photon Fusion 2 → [integrations/photon/](../photon/README.md) |
+| 네트워킹 | Unity Netcode for GameObjects → [integrations/netcode/](../netcode/README.md) |
 
 Unity Integration은 이 프로젝트(및 앞으로 만들 프로젝트)가 공통으로 따르는 **Unity 환경, 프로젝트 구조, Git 연동 표준**을 관리합니다.
 
@@ -62,9 +62,10 @@ unity/
 |----------|-------------|
 | [agents/unity.md](../../agents/unity.md) | Unity Agent 코딩 원칙 및 Architecture 가이드 |
 | [docs/decisions/0004-unity-starter-template.md](../../docs/decisions/0004-unity-starter-template.md) | Unity Starter Template 구조 결정 근거(ADR) |
-| [docs/decisions/0007-photon-fusion-multiplayer-stack.md](../../docs/decisions/0007-photon-fusion-multiplayer-stack.md) | 현재 `game/` 프로젝트의 Editor 버전·패키지·폴더 구성 결정 근거(ADR) |
+| [docs/decisions/0007-photon-fusion-multiplayer-stack.md](../../docs/decisions/0007-photon-fusion-multiplayer-stack.md) | 현재 `game/` 프로젝트의 Editor 버전·패키지·폴더 구성 결정 근거(ADR). 네트워킹 부분은 ADR 0009로 대체됨 |
+| [docs/decisions/0009-netcode-for-gameobjects.md](../../docs/decisions/0009-netcode-for-gameobjects.md) | 멀티플레이 스택을 NGO로 정한 결정 근거(ADR) |
 | [docs/team/README.md](../../docs/team/README.md) | Unity 공동 작업 규칙 (Scene 소유권, LFS Locking, `.meta` 규칙) |
-| [integrations/photon/README.md](../photon/README.md) | Photon Fusion 2 연동 표준 |
+| [integrations/netcode/README.md](../netcode/README.md) | Netcode for GameObjects 연동 표준 |
 
 ---
 
@@ -76,6 +77,7 @@ unity/
 - ~~Unity MCP 연동 검토~~ 완료 (Unity CLI MCP Mode, `scripts/setup_mcp.sh`)
 - CI 기반 Unity Build 자동화
 - `Scripts/Networking/` 카테고리를 `project_template.md`의 표준 구조에 정식 편입할지 결정 ([ADR 0007](../../docs/decisions/0007-photon-fusion-multiplayer-stack.md) 후속 작업)
+- 팀원이 서로 다른 네트워크에서 테스트해야 할 때 Relay 도입 검토 ([ADR 0009](../../docs/decisions/0009-netcode-for-gameobjects.md) 후속 작업)
 - 복사 가능한 폴더 스켈레톤 + `manifest.json` 프리셋 추출 (두 번째 게임 프로젝트가 생기는 시점에 `game/`의 실제 구성에서 역으로 뽑아냄)
 
 ---

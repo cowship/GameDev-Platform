@@ -70,7 +70,7 @@ GameDev-Platform
 │
 ├── agents              ← AI Agent 역할 정의
 ├── docs                ← 아키텍처, 의사결정(ADR), 팀 운영 문서
-├── integrations        ← Unity / GitHub / Photon / Notion / MCP 연동 표준
+├── integrations        ← Unity / GitHub / Netcode / Notion / MCP 연동 표준
 ├── prompts
 ├── scripts             ← 환경 구축 자동화 스크립트
 ├── templates
@@ -95,7 +95,7 @@ GameDev-Platform
 - Claude Code
 - Node.js
 - Unity 6000.3.22f1 (URP, 2D)
-- Photon Fusion 2 (멀티플레이 네트워킹)
+- Unity Netcode for GameObjects (멀티플레이 네트워킹)
 - Notion
 - MCP
 
@@ -125,7 +125,7 @@ Team Collaboration — 진행 중 (5인 팀, PR 기반 협업)
 
 ## Stage 6
 
-First Game Project — 진행 중 (Unity + Photon Fusion 멀티플레이)
+First Game Project — 진행 중 (Unity + Netcode for GameObjects 멀티플레이)
 
 ---
 

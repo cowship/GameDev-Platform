@@ -75,7 +75,7 @@ Claude는 다음 역할을 수행합니다.
 | 위치 | `game/` (Unity Hub로 이 폴더를 엽니다. 저장소 루트가 아닙니다) |
 | Unity Editor | `6000.3.22f1` — `game/ProjectSettings/ProjectVersion.txt`가 Source of Truth |
 | Render Pipeline | URP (2D) |
-| 네트워킹 | Photon Fusion 2 → `integrations/photon/` |
+| 네트워킹 | Unity Netcode for GameObjects (NGO) → `integrations/netcode/` |
 | 팀 | 5인, PR 기반 협업 → `docs/team/README.md` |
 
 Unity 관련 작업을 할 때는 경로를 `game/Assets/...`로 지정합니다. 저장소 루트의 `docs/`, `scripts/` 등은 Unity 프로젝트의 일부가 아닙니다.

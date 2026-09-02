@@ -174,7 +174,7 @@ echo " 남은 수동 단계"
 echo "========================================"
 echo "1. Unity Hub → Add project from disk → 이 저장소의 game/ 폴더 선택"
 echo "   (저장소 루트가 아닙니다. Editor 버전은 game/ProjectSettings/ProjectVersion.txt 와 일치해야 합니다)"
-echo "2. Photon Fusion SDK import 및 App Id 입력 → integrations/photon/setup.md"
+echo "2. 네트워킹(NGO)은 별도 설치가 필요 없습니다 → integrations/netcode/README.md"
 echo "3. 브랜치 사용 규칙 → docs/team/README.md"
 echo "4. (선택) Claude Code를 쓴다면 → ./scripts/setup_mcp.sh"
 echo

@@ -19,7 +19,7 @@
 | 프로젝트 경로 | `game/` |
 | Editor 버전 | `6000.3.22f1` (`game/ProjectSettings/ProjectVersion.txt`가 Source of Truth) |
 | Render Pipeline | URP (2D) |
-| 네트워킹 | Photon Fusion 2 → [integrations/photon/](../photon/README.md) |
+| 네트워킹 | Unity Netcode for GameObjects → [integrations/netcode/](../netcode/README.md) |
 
 ---
 
@@ -110,7 +110,7 @@ Scene, Prefab 파일은 동시 편집 시 Merge Conflict 위험이 높습니다.
 | Architecture 결정 | Technical Lead Agent |
 | 빌드/기능 검증 | QA Agent |
 | 게임 시스템 기획 | Game Designer Agent |
-| 멀티플레이 동기화 설계 | Technical Lead Agent + [integrations/photon/workflow.md](../photon/workflow.md) |
+| 멀티플레이 동기화 설계 | Technical Lead Agent + [integrations/netcode/workflow.md](../netcode/workflow.md) |
 
 ---
 

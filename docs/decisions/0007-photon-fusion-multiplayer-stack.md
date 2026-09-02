@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted (2026-09-02)
+Superseded in part (2026-09-02) — 네트워킹 솔루션 결정(Decision 6, 7: Photon Fusion SDK 커밋, App Id 공유)은 [ADR 0009](0009-netcode-for-gameobjects.md)로 대체되었다. 나머지 결정(Decision 1~5, 8: Editor 버전 고정, 2D+URP 템플릿, 패키지 버전 기준, Assets 구조, Tests asmdef)은 **그대로 유효하다.**
 
 ## Context
 

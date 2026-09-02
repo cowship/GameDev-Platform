@@ -98,9 +98,9 @@ GameDev-Platform
 | Stage 3 | Documentation Platform | `docs/architecture/`(본 문서), `docs/decisions/`, Notion 연동 |
 | Stage 4 | Unity Starter Template | `integrations/unity/`(스펙 확정, ADR 0004). 스펙은 `game/` 프로젝트 생성으로 처음 실물 적용됨(ADR 0007) |
 | Stage 5 | Team Collaboration | `integrations/github/workflow.md`(Branch/PR 표준), `docs/team/`(팀 운영 절차), `.github/`(Issue·PR 템플릿, CODEOWNERS), `scripts/setup_team_member.sh`. 5인 팀 PR 기반 협업으로 전환 (ADR 0006) |
-| Stage 6 | First Game Project | `game/` — Unity 6000.3.22f1 + URP(2D) + Photon Fusion 2. `integrations/photon/`이 네트워킹 표준 (ADR 0007) |
+| Stage 6 | First Game Project | `game/` — Unity 6000.3.22f1 + URP(2D) + Netcode for GameObjects. `integrations/netcode/`가 네트워킹 표준 (ADR 0007, 0009) |
 
-현재(2026-09-02 기준) Stage 1~4는 완료되었고, **Stage 5(Team Collaboration)와 Stage 6(First Game Project)이 동시에 진행 중**입니다. 팀원 5명이 이미 이 저장소를 clone한 상태에서 Unity + Photon Fusion 게임 개발을 시작하게 되어, 별도 게임 Repository를 만드는 대신 이 저장소의 `game/`에서 개발하고 운영 모델을 PR 기반으로 전환했습니다([ADR 0006](../decisions/0006-game-development-in-platform-repository.md), [ADR 0007](../decisions/0007-photon-fusion-multiplayer-stack.md)). 본 문서 세트는 Stage 3의 산출물입니다.
+현재(2026-09-02 기준) Stage 1~4는 완료되었고, **Stage 5(Team Collaboration)와 Stage 6(First Game Project)이 동시에 진행 중**입니다. 팀원 5명이 이미 이 저장소를 clone한 상태에서 Unity 멀티플레이 게임 개발을 시작하게 되어, 별도 게임 Repository를 만드는 대신 이 저장소의 `game/`에서 개발하고 운영 모델을 PR 기반으로 전환했습니다([ADR 0006](../decisions/0006-game-development-in-platform-repository.md), [ADR 0007](../decisions/0007-photon-fusion-multiplayer-stack.md)). 네트워킹 스택은 착수 직후 Photon Fusion에서 Netcode for GameObjects로 변경했습니다([ADR 0009](../decisions/0009-netcode-for-gameobjects.md)). 본 문서 세트는 Stage 3의 산출물입니다.
 
 ---
 

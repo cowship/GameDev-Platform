@@ -37,7 +37,7 @@
 |---|---|---|
 | 1 | GitHub (SSH Key, 저장소) | [integrations/github/setup.md](../../integrations/github/setup.md) |
 | 2 | Unity (Hub, Editor, Git LFS) | [integrations/unity/setup.md](../../integrations/unity/setup.md) |
-| 3 | Photon Fusion | [integrations/photon/setup.md](../../integrations/photon/setup.md) |
+| 3 | 네트워킹 (NGO) | [integrations/netcode/setup.md](../../integrations/netcode/setup.md) |
 | 4 | Claude Code | [integrations/claude/setup.md](../../integrations/claude/setup.md) |
 | 5 | MCP | [integrations/mcp/setup.md](../../integrations/mcp/setup.md) |
 | 6 | Notion | [integrations/notion/workspace.md](../../integrations/notion/workspace.md) *(설치 절차 없음, Workspace 구조 문서)* |
@@ -52,7 +52,6 @@ Windows에서는 대부분의 도구가 GUI 설치라 스크립트로 대신할 
 - [ ] **Unity Hub + Editor 6000.3.22f1 설치** — 버전이 다르면 프로젝트 파일이 갈립니다
 - [ ] **GitHub SSH Key 등록** — 키 생성은 명령 한 줄이지만, GitHub 웹사이트에 공개키를 붙여넣는 것은 수동. `ssh -T git@github.com`으로 확인
 - [ ] **Collaborator 초대 수락** — 수락 전에는 clone/push가 되지 않습니다
-- [ ] **Photon App Id 발급 및 입력** — [integrations/photon/setup.md](../../integrations/photon/setup.md)
 - [ ] **Notion MCP 계정 연동** — 브라우저 OAuth라 CLI로 대신할 수 없음 (Claude Code 사용자만 해당)
 
 ---
@@ -61,7 +60,7 @@ Windows에서는 대부분의 도구가 GUI 설치라 스크립트로 대신할 
 
 | Document | Description |
 |---|---|
-| [docs/team/ONBOARDING.md](../team/ONBOARDING.md) | 팀원 최초 환경 구축 절차 (SSH → clone → 스크립트 → Unity → Photon) |
+| [docs/team/ONBOARDING.md](../team/ONBOARDING.md) | 팀원 최초 환경 구축 절차 (SSH → clone → 스크립트 → Unity) |
 | [docs/team/README.md](../team/README.md) | 협업 규칙 |
 | [.github/workflows/](../../.github/workflows/) | Agent 드리프트 검사, Shellcheck |
 | [docs/decisions/0008-windows-only-development-environment.md](../decisions/0008-windows-only-development-environment.md) | Windows 단일 환경으로 정한 근거 |

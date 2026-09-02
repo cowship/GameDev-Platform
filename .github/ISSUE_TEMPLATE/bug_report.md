@@ -22,7 +22,7 @@ labels: bug
 
 - Unity 버전: 6000.3.22f1
 - 실행 형태: <!-- Editor / 빌드 / Multiplayer Play Mode -->
-- 네트워크 역할: <!-- Host / Client / Shared Mode / 해당 없음 -->
+- 네트워크 역할: <!-- Host / Server / Client / 해당 없음 -->
 - 플랫폼:
 
 ## Severity

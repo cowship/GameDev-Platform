@@ -96,7 +96,7 @@
 | CLI 바이너리 경로 | `%LOCALAPPDATA%\Unity\bin\unity.exe` — Unity Hub(43.4.0+)가 자동 설치하며 PATH에 등록됨 |
 | 등록 명령 | `unity mcp configure claude-code` (`scripts/setup_mcp.sh`가 자동 호출) |
 | 스킬 | `unity skill install claude-code` — Unity CLI 사용법 스킬을 `~/.claude/skills/unity-cli/`에 설치 |
-| 상태 | 2026-08-25에 WSL 환경에서 Editor까지 실측 검증했으나, 2026-09-02 Windows 단일 환경 전환([ADR 0008](../../docs/decisions/0008-windows-only-development-environment.md)) 이후로는 **재검증 필요** |
+| 상태 | **등록 검증 완료 (2026-09-02, Windows)** — `scripts/setup_mcp.sh`가 `unity mcp configure claude-code`로 등록에 성공하고 `claude mcp list`에서 `unity-editor-mcp: unity mcp - Connected` 확인. `unity skill install claude-code`도 성공. Editor 연결(`unity status`) 확인은 프로젝트 최초 실행 이후 |
 
 > 폐기된 이전 방식: 기존에는 Unity 6000.0+ 내장 `com.unity.ai.assistant` 패키지의 in-Editor MCP Bridge + `relay_win.exe`를 사용했으나(서버 이름 `unity-mcp`), Unity가 in-Editor MCP server를 폐기하고 Unity CLI로 대체한다고 공식 발표(2026-08)함에 따라 프로젝트 시작 전인 이 시점에 미리 CLI 방식으로 전환했습니다. `unity-mcp`/relay 등록은 제거됨.
 

@@ -275,6 +275,44 @@ git lfs pull
 
 SSH 키가 GitHub에 등록되지 않았거나, Collaborator 초대를 아직 수락하지 않은 경우입니다. 1단계를 다시 확인하세요.
 
+## `Connection reset by ... port 22` — SSH 포트가 막힌 네트워크
+
+```text
+Connection reset by 64:ff9b::14c8:f5f7 port 22
+fatal: Could not read from remote repository.
+```
+
+학교·회사 네트워크에서 22번 포트를 막아둔 경우입니다. 키 문제가 아니므로 재발급할 필요 없습니다. GitHub는 **443 포트로도 SSH를 받아주므로** 아래처럼 우회합니다.
+
+```bash
+cat >> ~/.ssh/config <<'EOF'
+
+Host github.com
+  Hostname ssh.github.com
+  Port 443
+  User git
+EOF
+
+ssh -T git@github.com     # 다시 확인
+```
+
+이래도 안 되면 HTTPS로 바꿉니다. 첫 push 때 브라우저 로그인 창이 뜨고, 이후에는 Git Credential Manager가 인증을 기억합니다.
+
+```bash
+git remote set-url origin https://github.com/cowship/GameDev-Platform.git
+git push -u origin <브랜치이름>
+```
+
+## `gh: command not found`
+
+GitHub CLI는 선택 사항입니다. 설치하지 않고 **GitHub 웹에서 PR을 만들어도 됩니다** — push 후 저장소 페이지에 뜨는 `Compare & pull request` 버튼을 누르거나, 아래 주소로 바로 이동합니다.
+
+```text
+https://github.com/cowship/GameDev-Platform/pull/new/<브랜치이름>
+```
+
+설치하고 싶다면 PowerShell에서 `winget install --id GitHub.cli` 실행 후 Git Bash를 새로 엽니다.
+
 ---
 
 # Related Documents

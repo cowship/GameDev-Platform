@@ -63,6 +63,10 @@ __pycache__/
 /game/sysinfo.txt
 /game/crashlytics-build.properties
 
+# Multiplayer Play Mode(com.unity.multiplayer.playmode)가 만드는 로컬 가상 플레이어 설정.
+# ProjectSettings 아래에 있지만 사람마다 내용이 달라 공유 대상이 아닙니다.
+/game/ProjectSettings/VirtualProjectsConfig.json
+
 # 빌드 산출물
 *.apk
 *.aab

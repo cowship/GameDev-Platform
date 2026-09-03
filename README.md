@@ -148,6 +148,8 @@ GameDev-Platform는 **플랫폼 표준과 실제 게임 프로젝트를 함께 �
 
 자세한 절차는 [docs/team/ONBOARDING.md](docs/team/ONBOARDING.md), 협업 규칙은 [docs/team/README.md](docs/team/README.md)를 참고합니다.
 
+이 협업 기반이 **무엇으로, 왜 그렇게 구성되어 있는지**와 처음부터 다시 만드는 방법은 [docs/foundation/README.md](docs/foundation/README.md)에 정리되어 있습니다.
+
 ---
 
 # License

@@ -59,10 +59,10 @@ echo
 
 echo "2) GitHub MCP (Personal Access Token 필요)"
 echo "----------------------------------------"
-if is_registered github; then
-    printf "✅ %-20s 이미 등록됨 (건너뜀)\n" "github"
-else
-    TOKEN="${GITHUB_PERSONAL_ACCESS_TOKEN:-}"
+
+# 토큰을 입력받아 GitHub MCP를 등록합니다.
+register_github() {
+    local TOKEN="${GITHUB_PERSONAL_ACCESS_TOKEN:-}"
     if [ -z "$TOKEN" ]; then
         echo "GitHub Personal Access Token(Fine-grained 권장)이 아직 없다면 발급 방법은 integrations/github/setup.md 를 참고하세요."
         read -r -s -p "GitHub Personal Access Token 입력 (입력값은 화면에 표시되지 않습니다): " TOKEN
@@ -78,6 +78,8 @@ else
                 echo "   발급 방법: integrations/github/setup.md 참고. 그대로 계속 등록을 진행합니다."
                 ;;
         esac
+        # 이미 등록된 항목이 남아 있으면 새 토큰이 반영되지 않으므로 먼저 지웁니다 (없으면 무시).
+        claude mcp remove github >/dev/null 2>&1 || true
         if claude mcp add github -e GITHUB_PERSONAL_ACCESS_TOKEN="$TOKEN" -- npx -y @modelcontextprotocol/server-github >/dev/null 2>&1; then
             printf "✅ %-20s 등록 완료\n" "github"
             MCP_LIST="$(claude mcp list 2>/dev/null)"
@@ -86,6 +88,27 @@ else
         fi
     fi
     unset TOKEN
+}
+
+if is_registered github; then
+    printf "✅ %-20s 이미 등록되어 있습니다.\n" "github"
+    # 입력을 받을 수 없는 환경(비대화형 실행)에서는 기본값 Y로 건너뜁니다.
+    if ! read -r -p "   이대로 건너뛸까요? (새 토큰으로 다시 등록하려면 n) [Y/n] " ANSWER; then
+        ANSWER=""
+        echo
+    fi
+    case "${ANSWER:-Y}" in
+        [Nn]*)
+            printf "▶ %-20s 새 토큰으로 다시 등록합니다...\n" "github"
+            register_github
+            ;;
+        *)
+            printf "⏭️  %-20s 건너뜁니다.\n" "github"
+            ;;
+    esac
+    unset ANSWER
+else
+    register_github
 fi
 echo
 

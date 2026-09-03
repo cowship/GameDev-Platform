@@ -16,7 +16,26 @@
 | GitHub 계정 | 이 저장소의 Collaborator 초대를 수락해야 합니다 |
 | [GitHub CLI](https://cli.github.com/) | 터미널에서 PR을 다룹니다. 4단계에서 설치합니다 |
 
-아래 명령은 모두 **Git Bash**에서 실행합니다 (시작 메뉴 → `Git Bash`).
+> ⚠️ **명령은 전부 Git Bash에서 실행합니다** (시작 메뉴 → `Git Bash`). PowerShell이 필요한 곳은 **0·4·7단계 세 군데뿐**이고 그때마다 표시해 두었습니다.
+>
+> 그리고 **설치 후에는 터미널을 새로 여세요.** Windows는 이미 켜져 있는 터미널에 PATH를 반영해주지 않습니다. "분명 설치했는데 명령어를 못 찾는다"의 대부분이 이것입니다.
+
+## WSL에서 옮겨오는 경우 — 무엇을 다시 해야 하나
+
+WSL과 Windows는 같은 노트북 안에 있어도 **사실상 다른 컴퓨터 두 대**입니다. 홈 디렉토리도 설치한 프로그램도 따로라, Ubuntu에서 설치한 Git과 Claude Code는 Windows에서 아예 보이지 않습니다. 게다가 Unity Editor는 WSL 내부 경로의 프로젝트를 **열지 못합니다**([ADR 0008](../decisions/0008-windows-only-development-environment.md)).
+
+| 항목 | 다시 해야 하나? | 이유 |
+|---|---|---|
+| GitHub / Claude 계정, Notion 커넥터 | ❌ | 계정 단위라 기기와 무관합니다 |
+| Unity Hub / Editor | ❌ | 원래부터 Windows에 설치돼 있었습니다 |
+| GitHub PAT(토큰) | ⚠️ | 값을 저장해뒀으면 재사용, 없으면 재발급 |
+| Git for Windows | ✅ | Git Bash와 Git LFS가 여기 딸려옵니다 |
+| SSH key | ✅ | WSL 홈의 `~/.ssh`는 Windows에서 안 보입니다 |
+| 저장소 clone | ✅ | Windows 드라이브 경로로 다시 받아야 합니다 |
+| git config / LFS / 병합 드라이버 | ✅ | 3단계 스크립트가 한 번에 처리합니다 |
+| GitHub CLI (`gh`) | ✅ | 설치도 로그인도 WSL 쪽에만 돼 있습니다 |
+| Claude Code 설치 + 로그인 | ✅ | 환경별로 새로 설치·로그인해야 합니다 |
+| MCP 서버 등록 | ✅ | 등록 정보가 WSL 홈의 `.claude.json`에 있습니다 |
 
 ---
 
@@ -50,6 +69,22 @@ Phase 0이 끝났으므로 **지금 바로 1~9단계를 순서대로 진행하�
 - [x] 게임 제목 확정 → `productName`이 `NGOgame`으로 반영됨 (2026-09-02)
 - [ ] NetworkManager Prefab 생성 → [integrations/netcode/setup.md](../../integrations/netcode/setup.md)
 - [ ] 첫 Issue 등록 및 Sprint 시작
+
+---
+
+# 0. Git for Windows 설치
+
+Git Bash와 Git LFS가 딸려오니 이걸 제일 먼저 깝니다. [git-scm.com/download/win](https://git-scm.com/download/win)에서 받거나, **PowerShell**에서 아래를 실행합니다.
+
+```powershell
+winget install --id Git.Git -e
+```
+
+Git Bash를 새로 열고 확인합니다. 사용자 정보(`user.name` / `user.email`)는 3단계 스크립트가 확인해주니 지금 설정하지 않아도 됩니다.
+
+```bash
+git --version
+```
 
 ---
 
@@ -89,7 +124,7 @@ cd GameDev-Platform
 > Please move the project folder somewhere readable and writable.
 > ```
 >
-> 경로에 한글이나 공백이 없는 위치를 권장합니다.
+> 경로에 **한글이나 공백이 없어야** 합니다. 사용자 폴더 밑(`C:\Users\...`)은 계정명에 한글이 있으면 걸리니, `D:\Work` 같은 드라이브 직하 경로가 안전합니다.
 
 ---
 
@@ -191,51 +226,15 @@ This project was last opened with a different version of the Editor.
 
 **그냥 열지 마세요.** Unity Hub에서 `6000.3.22f1`을 설치한 뒤 그 버전으로 엽니다. 다른 버전으로 열면 `ProjectSettings`와 Asset이 자동 업그레이드되어 대량 변경이 팀 전체로 퍼집니다.
 
-## 프로젝트를 처음 여는 사람에게만 나타나는 변화
+## (완료됨) 최초 1명만 하던 부트스트랩 — 이제 신경쓰지 않아도 됩니다
 
-> 이 단계는 **팀에서 한 명만** 수행하면 됩니다. 이미 누군가 끝냈다면 `git pull`만 하면 됩니다.
+Unity로 `game/`을 처음 여는 사람은 폴더마다 `.meta`가 새로 생성됩니다. 이게 `main`에 올라가기 전에 다른 사람이 Unity를 열면 **각자 다른 GUID가 생겨 참조가 깨지고**, 병합으로 풀리지 않습니다. 그래서 한 명이 먼저 열어 커밋하고 나머지가 받는 순서가 필요했습니다.
 
-`game/`은 아직 Unity로 열린 적이 없는 상태로 커밋되어 있습니다. 처음 여는 사람은 `git status`에 **폴더별 `.meta` 파일이 새로 생성**된 것을 보게 됩니다. Unity가 `Assets/` 하위 폴더마다 GUID를 부여하며 만드는 파일이라 **정상**이며, 반드시 커밋해야 합니다. 커밋하지 않으면 다음 사람이 열 때 다른 GUID가 생성되어 참조가 어긋납니다.
+**2026-09-02에 끝났습니다.** 지금은 기다릴 것 없이 0단계부터 순서대로 진행하면 됩니다.
 
-### 커밋 전에 `git status` 확인
+Photon Fusion을 쓸 때 필요했던 SDK import와 App Id 공유 절차도 NGO로 바뀌면서 함께 사라졌습니다.
 
-아래와 같이 **추가만 있고 기존 파일 수정이 거의 없어야** 정상입니다.
-
-| 파일 | 예상 상태 | 커밋 |
-|---|---|---|
-| `game/Assets/**/*.meta` | 새로 추가 (폴더마다) | ✅ |
-| `game/Packages/packages-lock.json` | 새로 추가 — 팀 전원의 패키지 버전을 고정합니다 | ✅ |
-| `game/ProjectSettings/ProjectVersion.txt` | 수정 — `m_EditorVersionWithRevision` 줄이 채워짐 | ✅ |
-| `game/Assets/Settings/*.asset` | 수정될 수 있음 — URP 업그레이드 결과 | ✅ |
-| `game/Library/`, `game/UserSettings/`, `game/Logs/` | `.gitignore` 대상이라 **아예 보이지 않아야** 함 | — |
-
-`ProjectSettings/`의 **다른** 파일들이 무더기로 수정됐다면 멈추세요. Editor 버전 불일치 신호입니다. 커밋하지 말고 팀에 알립니다.
-
-### 커밋 및 머지
-
-```bash
-git switch -c chore/unity-first-open
-git add game/
-git commit -m "chore: Unity 최초 실행으로 생성된 .meta 및 패키지 lock 추가"
-git push -u origin chore/unity-first-open
-gh pr create --base main --fill     # 또는 GitHub 웹에서 PR 생성
-```
-
-> **이 PR은 리뷰를 기다리지 말고 본인이 바로 Squash and merge 하세요.**
->
-> 평소에는 `main` 병합 전에 1명 이상의 Approve를 받는 것이 규칙입니다([docs/team/README.md](README.md)). 이 커밋만 예외로 두는 이유는 두 가지입니다.
->
-> - 내용이 전부 Unity가 기계적으로 생성한 산출물이라 사람이 검토할 대상이 없습니다.
-> - 나머지 팀원 4명이 이 커밋을 받아야 작업을 시작할 수 있어, 대기 비용이 리뷰의 가치보다 큽니다.
->
-> PR 자체는 남기세요. 기록이 남고, 팀의 첫 PR 흐름을 한 번 굴려보는 의미도 있습니다.
-
-머지한 뒤 **팀에 공지**합니다.
-
-```text
-game/ 최초 실행 커밋이 main에 올라갔습니다.
-git pull 받은 뒤 Unity Hub로 game/ 폴더를 열어주세요.
-```
+> 열었을 때 `git status`가 깨끗하지 않다면 8단계의 마지막 항목을 참고하세요. 내가 건드리지도 않은 파일이 무더기로 수정됐다면 Editor 버전 불일치 신호이니, 커밋하지 말고 팀에 알립니다.
 
 ---
 
@@ -251,7 +250,9 @@ git pull 받은 뒤 Unity Hub로 game/ 폴더를 열어주세요.
 ## 확인만 하세요
 
 - [ ] `Window > Package Manager` → **In Project**에 `Netcode for GameObjects`가 보인다
-- [ ] `Window > Multiplayer > Multiplayer Play Mode` 메뉴가 있다
+- [ ] `Window > Multiplayer > Playmode` 메뉴가 있다
+
+보이지 않으면 Unity를 닫고 `game/Library/PackageCache`를 지운 뒤 다시 엽니다.
 
 `Multiplayer Play Mode`는 **빌드 없이 한 Editor에서 여러 플레이어를 띄우는** 도구입니다. 멀티플레이는 혼자 검증하기 어려운데, 이게 있으면 혼자서도 2인 상황을 재현할 수 있습니다.
 
@@ -267,23 +268,105 @@ git pull 받은 뒤 Unity Hub로 game/ 폴더를 열어주세요.
 
 Claude Code를 쓰는 팀원만 해당됩니다.
 
+## 설치
+
+**이 명령만 PowerShell**에서 실행하고, 터미널을 새로 연 뒤 로그인합니다. 브라우저가 열리면 **우리 팀 Claude 계정**으로 로그인합니다.
+
+```powershell
+irm https://claude.ai/install.ps1 | iex
+claude --version
+```
+
+## MCP 서버 등록
+
+여기서부터 다시 **Git Bash**입니다. 저장소 폴더에서 실행합니다.
+
 ```bash
 ./scripts/setup_mcp.sh          # filesystem / github / context7 / Unity MCP 등록
 ./scripts/setup_claude_skills.sh # Unity 전용 Skill 설치
 ```
 
-`setup_mcp.sh`는 GitHub Personal Access Token 입력을 요구하고, Notion은 최초 1회 브라우저 인증이 필요합니다. Unity MCP 도구는 **Unity Editor가 실행 중일 때만** 응답합니다 (`unity status`로 확인).
+`setup_mcp.sh`가 두 가지를 요구합니다.
+
+- **GitHub Personal Access Token** — 계정 단위라 기기가 바뀌어도 유효합니다. 저장해둔 값이 있으면 그대로 씁니다.
+- **Notion 최초 1회 브라우저 인증**
+
+> ⚠️ 토큰은 비밀번호입니다. Notion, Slack, 카카오톡 어디에도 붙여넣지 마세요. 노출됐다면 GitHub의 Settings > Developer settings에서 **즉시 폐기하고 새로 발급**받습니다.
+
+## Unity MCP 확인
+
+Unity MCP 도구는 **`game/`을 연 Unity Editor가 실행 중일 때만** 응답합니다. Editor를 켜둔 뒤 저장소 폴더에서 Git Bash를 새로 열고 확인합니다.
+
+```bash
+unity status
+```
+
+프로젝트가 한 줄 잡히면 정상입니다. 더 확실히 보려면 Claude를 띄워 `/mcp`를 물어봅니다.
+
+```bash
+claude
+/mcp
+```
+
+전부 `connected`이고 `unity-editor-mcp`에 도구가 100여 개 보이면 됩니다.
+
+### `connected`인데 `no tools`로 뜨면
+
+도구 목록은 CLI가 아니라 **Editor 안의 `com.unity.pipeline` 패키지**가 노출합니다. `/mcp`의 `connected`는 Claude Code ↔ CLI 구간만 확인해주기 때문에, 이 패키지가 없으면 `connected`인데 도구가 0개로 뜹니다.
+
+이 패키지는 **`manifest.json`에 커밋되어 있어 `game/`을 Editor로 열면 자동으로 받아집니다.** 보통은 Editor를 켜고 Git Bash를 새로 열면 해결됩니다.
+
+그래도 안 되면 `esc` → `/exit`로 Claude를 끄고 상태를 확인합니다.
+
+```bash
+unity pipeline list
+```
+
+`📦 Pipeline`이 설치됨으로 나오지 않으면 직접 설치합니다. `cd game`을 하는 이유는 Unity 프로젝트가 저장소 루트가 아니라 `game/` 폴더이기 때문입니다.
+
+```bash
+cd game
+unity pipeline install
+```
+
+설치 후 **Unity Editor와 Git Bash를 모두 재실행**하고 `/mcp`와 `unity status`를 다시 확인합니다.
+
+> `com.unity.pipeline`은 `com.unity.render-pipelines.universal`(URP)과 **무관합니다.** 이름이 겹쳐서 `manifest.json`에서 `pipeline`을 검색하면 URP가 잡히니 주의하세요.
+
+## VS Code를 쓴다면
+
+VS Code에서 Claude Code extension을 설치하고, 위 setup 스크립트로 MCP를 모두 활성화한 뒤 세션을 초기화합니다. MCP 도구와 서버 연결이 모두 확인되면 VS Code 설정까지 끝입니다.
 
 ---
 
 # 8. 동작 확인
 
+저장소 폴더의 Git Bash에서 세 가지를 확인합니다.
+
 - [ ] `ssh -T git@github.com`에 본인 계정 이름이 나온다
 - [ ] `gh auth status`에 본인 계정이 나온다
+- [ ] `git status`에 **기존 파일의 수정**이 없다
+
+나머지 세 가지는 Unity Hub에서 `game/`을 열어 Editor에서 확인합니다.
+
 - [ ] Unity Console에 빨간 에러가 없다
 - [ ] `game/Assets/Scenes/SampleScene.unity`가 열리고 Play가 된다
 - [ ] `Window > General > Test Runner`에 EditMode/PlayMode 탭이 보인다
-- [ ] `git status`에 **기존 파일의 수정**이 없다
+
+어디서 걸렸는지 알면 어디를 고칠지도 바로 나옵니다.
+
+| 항목 | 실패하면 |
+|---|---|
+| ssh 확인 | 1단계로. Collaborator 초대 수락 여부도 확인 |
+| gh 확인 | 4단계 로그인으로. WSL에서 해둔 로그인은 넘어오지 않습니다 |
+| Console 에러 없음 | 대개 패키지 누락입니다. `packages-lock.json`을 받았는지 확인 |
+| SampleScene Play | Git LFS 미설정이나 `.meta` 누락을 의심 |
+| Test Runner 탭 | `packages-lock.json`이 안 받아진 상태일 가능성 |
+| git status 깨끗함 | Editor 버전 불일치. 아래 경고 참고 |
+
+> 🚨 **마지막 항목이 제일 중요합니다.**
+>
+> 내가 건드리지도 않은 파일이 수십·수백 개 수정된 것으로 뜬다면 거의 확실히 Editor 버전이 `6000.3.22f1`이 아닙니다. **그대로 커밋하면 팀 전원의 프로젝트가 같이 틀어집니다.** 커밋하지 말고 팀에 먼저 알리세요.
 
 ---
 
@@ -291,12 +374,12 @@ Claude Code를 쓰는 팀원만 해당됩니다.
 
 여기까지 오면 개인 환경은 끝입니다. 팀 전체 기준으로 아래가 모두 채워져야 게임 개발을 시작할 수 있습니다.
 
-- [ ] `main`에 Unity 최초 실행 커밋이 들어가 있다 (`game/Assets/**/*.meta`, `packages-lock.json` 존재)
-- [ ] `Window > Package Manager`에 `Netcode for GameObjects`가 보인다
-- [ ] 팀원 5명 전원이 `setup_team_member.sh`를 돌렸다
-- [ ] 팀원 5명 전원이 Unity로 `game/`을 열어 에러 없이 Play까지 확인했다
+- [x] `main`에 Unity 최초 실행 커밋이 들어가 있다 (`game/Assets/**/*.meta`, `packages-lock.json` 존재)
+- [x] 게임 제목 확정 → `productName`이 `NGOgame`으로 반영됨 (2026-09-02)
+- [ ] 팀원 5명 전원이 0~9단계를 끝냈다
 - [ ] 역할 분담이 정해지고 [.github/CODEOWNERS](../../.github/CODEOWNERS)에 반영됐다
-- [ ] 각자 `sandbox/{본인계정}` 브랜치를 확인했다
+- [ ] NetworkManager Prefab 생성 → [integrations/netcode/setup.md](../../integrations/netcode/setup.md)
+- [ ] 첫 Issue 등록 및 Sprint 시작
 
 ---
 
@@ -304,7 +387,7 @@ Claude Code를 쓰는 팀원만 해당됩니다.
 
 [docs/team/README.md](README.md)의 Branch 전략과 Unity 공동 작업 규칙을 읽습니다. 특히 아래 3가지가 사고가 잦은 지점입니다.
 
-- `.meta` 파일 함께 커밋하기
+- Asset 추가·이동·삭제는 Unity 에디터 안에서 하기 (`.meta` GUID가 어긋나는 것을 막습니다)
 - 하나의 Scene은 한 명만 수정하기
 - 바이너리 자산은 `git lfs lock`으로 선점하기
 
@@ -373,9 +456,11 @@ To get started with GitHub CLI, please run: gh auth login
 
 로그인이 되어 있지 않은 상태입니다. 4단계의 로그인 절차를 진행하세요. **WSL에서 해둔 로그인은 Windows로 넘어오지 않습니다.** 현재 상태는 `gh auth status`로 확인합니다.
 
-## `gh: command not found`
+## 명령어를 못 찾습니다 (`gh` / `claude` is not recognized 등)
 
-설치되지 않았거나, 설치 후 터미널을 새로 열지 않은 경우입니다. **Git Bash를 닫고 새로 열어보세요.** 그래도 없으면 PowerShell에서 설치합니다.
+설치되지 않았거나, 설치 후 터미널을 새로 열지 않은 경우입니다. **Git Bash를 닫고 새로 열어보세요.** Windows는 이미 열려 있는 터미널에 PATH를 반영해주지 않습니다.
+
+`claude`가 안 잡히면 `claude doctor`로 진단합니다. `gh`가 없으면 PowerShell에서 설치합니다.
 
 ```powershell
 winget install --id GitHub.cli
